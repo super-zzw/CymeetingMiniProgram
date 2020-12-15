@@ -13,11 +13,10 @@
   "window": {
     "backgroundColorTop": "#fff",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "保利威云会议",
+    "navigationBarTitleText": "辰悠云会议",
     "navigationBarTextStyle": "black",
     "onReachBottomDistance": 0,
-    "enablePullDownRefresh": false,
-    "navigationStyle": "custom"
+    "enablePullDownRefresh": false
   },
   "sitemapLocation": "sitemap.json"
 }

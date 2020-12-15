@@ -4,19 +4,22 @@
 // @Last modified by:   Chenyintang
 // @Last modified time: 2019-06-09 13:25:10
 @import "../../common/styles/variable.scss";
+
 page {
   height: 100%;
 }
+
 .p-container {
   height: 100%;
-  background-color: #f1f1f1;
+
   box-sizing: border-box;
 
   .p-body {
     box-sizing: border-box;
 
     .p-meeting-detail {
-      padding: 0 40rpx;
+      margin-top: 24rpx;
+      padding: 20rpx 40rpx;
       background-color: #fff;
       box-sizing: border-box;
 
@@ -31,29 +34,45 @@ page {
 
       .p-item-box {
         margin-bottom: 16rpx;
+        margin-top: 20rpx;
 
         .p-item {
           position: relative;
           z-index: 666;
-          height: 104rpx;
+          height: 80rpx;
           display: flex;
           align-items: center;
-          font-size: $size34;
+          justify-content: space-between;
+          font-size: $size32;
           box-sizing: border-box;
 
+          .p-edit {
+            width: 40rpx;
+            height: 40rpx;
+            margin-left: 30rpx;
+          }
+
+          .p-lock {
+            width: 48rpx;
+            height: 48rpx;
+            margin-left: 16rpx;
+            z-index: 100
+          }
+
           .p-item-label {
-            width: 136rpx;
-            font-family: SFProText-Regular;
+            width: 165rpx;
+
+            font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: $color8;
-            margin-right: 64rpx;
+            color: #909399;
+            // margin-right: 64rpx;
           }
 
           .p-item-text {
-            flex: 1;
+
             font-family: PingFangSC-Regular;
             font-weight: 400;
-            color: $color35;
+            color: #181819;
             z-index: 666;
 
             &.p-item-room {
@@ -79,8 +98,8 @@ page {
               }
 
               .i-copy {
-                width: 48rpx;
-                height: 48rpx;
+                width: 40rpx;
+                height: 40rpx;
               }
             }
 
@@ -94,8 +113,8 @@ page {
               }
 
               .i-copy {
-                width: 48rpx;
-                height: 48rpx;
+                width: 40rpx;
+                height: 40rpx;
                 margin-left: 44rpx;
               }
             }
@@ -105,14 +124,27 @@ page {
 
       &.p-meeting-people {
         padding: 0;
+        margin-top: 40rpx;
+        padding: 45rpx 40rpx 20rpx;
+        margin-bottom: 150rpx;
 
         .p-title {
           display: flex;
           align-items: center;
           justify-content: space-around;
           box-sizing: border-box;
-          padding-left: 40rpx;
+          padding: 0;
           position: relative;
+          height: auto;
+
+          .tit {
+
+            font-size: 32rpx;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #303133;
+            line-height: 44rpx;
+          }
 
           &.p-title-btn {
             border: none;
@@ -120,7 +152,7 @@ page {
             margin-left: 0;
             margin-right: 0;
             text-align: left;
-            height: 104rpx;
+            // height: 104rpx;
             border-radius: 0;
           }
 
@@ -146,7 +178,7 @@ page {
             border: none;
             margin-left: 0;
             margin-right: 0;
-            padding-right: 40rpx;
+            // padding-right: 40rpx;
             box-sizing: border-box;
             font-size: 18px;
             text-align: center;
@@ -156,6 +188,12 @@ page {
             overflow: hidden;
             line-height: 1;
             background-color: transparent;
+            display: flex;
+            align-items: center;
+            padding: 0;
+            color: #1890FF;
+
+            font-size: 28rpx;
           }
 
           button::after {
@@ -163,8 +201,9 @@ page {
           }
 
           .i-right {
-            width: 18rpx;
-            height: 28rpx;
+            width: 40rpx;
+            height: 40rpx;
+            margin-right: 4rpx;
           }
         }
 
@@ -173,13 +212,13 @@ page {
         }
 
         .p-item-box {
-          padding: 0 40rpx;
+          // padding: 0 40rpx;
         }
 
         .p-item-avatar {
-          width: 80rpx;
-          height: 80rpx;
-          margin-right: 24rpx;
+          width: 48rpx;
+          height: 48rpx;
+          margin-right: 14rpx;
           border-radius: 100%;
         }
 
@@ -198,15 +237,12 @@ page {
         .p-item-text {
           position: relative;
           z-index: 666;
-          height: 100%;
-          flex: 1;
+          // height: 100%;
+          // flex: 1;
           display: flex;
           align-items: center;
 
-          .i-edit {
-            width: 48rpx;
-            height: 48rpx;
-          }
+
 
           .i-mic {
             width: 28rpx;
@@ -222,6 +258,19 @@ page {
             flex: 1;
           }
         }
+
+        .i-edit {
+          width: 40rpx;
+          height: 40rpx;
+          margin-left: 14rpx;
+        }
+
+        .i-nosel {
+          width: 32rpx;
+          height: 32rpx;
+          border: 2rpx solid #C0C4CC;
+          border-radius: 50%
+        }
       }
     }
   }
@@ -230,50 +279,125 @@ page {
     position: fixed;
     left: 0;
     bottom: 0;
-    z-index: 9999999999;
+    z-index: 100;
     width: 100%;
+    height: 112rpx;
+    padding: 20rpx 44rpx;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
 
     .p-tab-box {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 316rpx;
+      height: 72rpx;
+      border-radius: 38rpx;
+      box-sizing: border-box;
+      display: grid;
+      place-items: center;
 
-      .p-tab-controls-item {
-        flex: 1;
-        height: 96rpx;
-        line-height: 96rpx;
-        font-size: $size36;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        text-align: center;
+      font-size: 30rpx;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
 
-        &.p-tab-controls-item--cancel {
-          color: #000;
-          background-color: #fff;
+
+      &.box1 {
+        color: #303133;
+        border: 2rpx solid #C0C4CC;
+      }
+
+      &.box2 {
+
+        background: #1890FF;
+
+        color: #FFFFFF;
+
+        &.nojoin {
+
+          background: #96CDFF;
         }
 
-        &.p-tab-controls-item--start {
-          background-color: #0066e6;
-          color: #fff;
 
-          &.p-tab-controls-item--disabled {
-            opacity: 0.4;
-          }
-        }
 
-        &.p-tab-controls-item-iphonex {
-          padding-bottom: 70rpx;
-        }
+      }
+
+    }
+
+    .p-tab-box1 {
+      width: 100%;
+
+      background: #1890FF;
+      border-radius: 44rpx;
+
+    
+      display: grid;
+      place-items: center;
+
+      font-size: 34rpx;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: #FFFFFF;
+
+      &.active {
+        opacity: 0.4;
       }
     }
   }
-
-  .p-modal-title {
-    font-size: 36rpx;
-    font-family: PingFangSC-Regular;
-    font-weight: 400;
-    color: rgba(0, 0, 0, 1);
-    text-align: center;
-    margin-bottom: 52rpx;
+  .p-modal-title{
+   
+font-size: 36rpx;
+font-family: PingFangSC-Semibold, PingFang SC;
+font-weight: 600;
+color: #303133;
+line-height: 50rpx;
+text-align: center;
+margin-bottom: 50rpx;
   }
+  .p-modal-con {
+   
+font-size: 28rpx;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+color: #303133;
+line-height: 40rpx;
+text-align: center;
+    margin-bottom: 52rpx;
+    .p-line{
+      margin-bottom: 20rpx;
+      font-size: 28rpx;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+
+line-height: 40rpx;
+text-align: center;
+
+      .p1{  
+        color: #909399;
+        width: 150rpx;
+        display: inline-block;
+        text-align: left;
+      }
+      .p2{
+color: #303133;
+display: inline-block;
+      }
+     
+
+    
+  }
+  .leaveMeeting{
+    width: 260rpx;
+height: 80rpx;
+background: #1890FF;
+border-radius: 40rpx;
+margin: 80rpx auto;
+display: grid;
+place-items: center;
+
+font-size: 28rpx;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+color: #FFFFFF;
+  }
+}
 }

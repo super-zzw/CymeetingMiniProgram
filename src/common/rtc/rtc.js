@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
-import regeneratorRuntime from '@lib/regenerator-runtime/regenerator-runtime';
-const AgoraRTC = require('@lib/agora-miniapp-sdk/Agora_Miniapp_SDK_for_WeChat'); // æ–°ç‰ˆæœ¬
-import aesjs from '@lib/aes-js/aes-js';
-import { Base64 } from '@lib/base64/base64';
-import * as Utils from '@common/utils/utils';
+import regeneratorRuntime from '../../lib/regenerator-runtime/regenerator-runtime';
+const AgoraRTC = require('../../lib/agora-miniapp-sdk/Agora_Miniapp_SDK_for_WeChat'); // æ–°ç‰ˆæœ¬
+import aesjs from '../../lib/aes-js/aes-js';
+import { Base64 } from '../../lib/base64/base64';
+import * as Utils from '../../common/utils/utils';
 
 const key = 'polyvliveSDKAuth';
 const iv = '1111000011110000';

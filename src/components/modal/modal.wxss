@@ -14,9 +14,10 @@
 .c-modal-content {
   display: flex;
   flex-direction: column;
+
   width: 560rpx;
   background-color: #fff;
-  width: 560rpx;
+
   border-radius: 16rpx;
   box-sizing: border-box;
   padding-top: 50rpx;

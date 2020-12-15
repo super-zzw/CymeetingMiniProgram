@@ -19,20 +19,32 @@ const EXPERIENCE_URL = '/api/user/getExperienceStatus';
 
 Page({
   data: {
-    isFinished: false, // 请求是否已完成，完成后才显示dom
+    isFinished: true, // 请求是否已完成，完成后才显示dom
     isIphoneX: false,
     isEditMode: false, // 主持人昵称是否属于编辑状态
     isShowModal: false, // 是否显示取消会议弹框
+    isShowModal1:false, //是否显示结束会议弹框
     isShowModal3: false, // 是否显示试用结束弹框
     isShowModal4: false, // 是否显示联系客服弹框
-    meetingDetail: {}, // 会议详情
-    joinMeetingPeopleList: [], // 加入会议室的人
+    meetingDetail: {
+      topic:'职称考核评定会议'
+    }, // 会议详情
+    joinMeetingPeopleList: [{
+      avatarUrl:'https://thirdwx.qlogo.cn/mmopen/vi_32/rOLs5CcKrLv5QTajbXOhhT3f2eAENHPF7kg3OZFUl99pzafFbN9HoIiaQCgoPceR7TknS4DwWR5UQAcRSMWFIpQ/132',
+      nickName:'红果果',
+      isHost:true
+    },
+    {
+      avatarUrl:'https://thirdwx.qlogo.cn/mmopen/vi_32/rOLs5CcKrLv5QTajbXOhhT3f2eAENHPF7kg3OZFUl99pzafFbN9HoIiaQCgoPceR7TknS4DwWR5UQAcRSMWFIpQ/132',
+      nickName:'zz',
+      isHost:false
+    }], // 加入会议室的人
     index: 0, // 当前编辑昵称的索引
     uid: '', // 当前编辑的用户的id
     meetingId: '', // 会议id
     nickName: '',
     roomno: '',
-    sourceType: '' // 进入页面的来源，records:表示从会议记录点击进入的
+    sourceType: 'records' // 进入页面的来源，records:表示从会议记录点击进入的
   },
   copyText(e) {
     const { currentTarget: { dataset: { text, psw } } } = e;
@@ -89,16 +101,11 @@ Page({
     });
   },
   async bindConfirm() {
-    this.cancelMeeting();
-    if (this.data.meetingDetail.isHost) {
-      this.handleCancelMeeting();
-    } else {
-      if (this.data.meetingDetail.status != 1) {
-        this.handleCancelMeeting();
-      } else {
-        this.handleLeavingMeeting();
-      }
-    }
+    this.bindCancel();
+    this.setData({
+      isShowModal1:true
+    })
+   
   },
   // 取消会议
   cancelMeeting() {
@@ -126,21 +133,11 @@ Page({
       utils.showToast({ title: '取消失败', icon: 'none' });
     }
   },
-  // 离开会议接口调用
+  // 离开会议
   async handleLeavingMeeting() {
-    const ret = await request.post('/api/meeting/leaveMeeting', { meetingId: this.data.meetingId });
-    try {
-      if (ret.code == config.successCode) {
-        this.setData({
-          isShowModal: false
-        });
-        utils.reLaunch('/pages/index/index');
-      } else {
-        utils.showToast({ title: ret.message, icon: 'none' });
-      }
-    } catch (error) {
-      utils.showToast({ title: '离开失败', icon: 'none' });
-    }
+    this.setData({
+      isShowModal1:false
+    })
   },
   // 开始、加入会议
   async startMeeting() {
@@ -256,6 +253,29 @@ Page({
       }
     });
   },
+  //锁定房间
+   locks(){
+  
+         wx.showToast({
+           title:'房间已锁定',
+           image:'/images/subscribe-meeting/lock.png'
+         })
+  },
+  // 解锁房间
+  nolocks(){
+    
+         wx.showToast({
+           title:'房间已解锁',
+           image:'/images/subscribe-meeting/no-lock.png'
+         })
+  },
+  // 结束会议
+  endMeeting(){
+    console.log(111)
+   this.setData({
+    isShowModal:true
+   })
+  },
   bindConfirm3() {
     this.setData({
       isShowModal3: false,
@@ -263,19 +283,20 @@ Page({
     });
   },
   onLoad(opt) {
-    const { meetingId, roomno, sourceType } = opt;
-    this.setData({
-      meetingId: meetingId,
-      roomno: roomno,
-      sourceType: sourceType
-    });
-    this.getMeetingDetail();
+   
+    // const { meetingId, roomno, sourceType } = opt;
+    // this.setData({
+    //   meetingId: meetingId,
+    //   roomno: roomno,
+    //   sourceType: sourceType
+    // });
+    // this.getMeetingDetail();
   },
   onShow() {
-    this.setData({
-      isIphoneX: app.globalData.isIphoneX,
-      year: new Date().getFullYear() + '年'
-    });
+    // this.setData({
+    //   isIphoneX: app.globalData.isIphoneX,
+    //   year: new Date().getFullYear() + '年'
+    // });
   },
   onShareAppMessage(e) {
     const { from } = e;

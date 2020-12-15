@@ -47,8 +47,9 @@ page {
 
       .p-box {
         box-sizing: border-box;
-        padding-left: 126rpx;
-        padding-right: 136rpx;
+      padding: 40rpx;
+        margin: 0 75rpx;
+        background: #F1F8FF;
         .p-box-item {
           display: flex;
           align-items: center;
@@ -59,7 +60,7 @@ page {
             font-size: 30rpx;
             font-family: SFProText-Regular;
             font-weight: 400;
-            color: rgba(136, 136, 136, 1);
+            color: #909399;
             line-height: 36rpx;
           }
 
@@ -81,20 +82,25 @@ page {
 
       .p-btn {
         width: 670rpx;
-        height: 96rpx;
-        line-height: 96rpx;
+        height: 88rpx;
+        line-height: 88rpx;
         text-align: center;
         margin: 106rpx auto 30rpx;
-        background: rgba(0, 102, 230, 1);
-        border-radius: 10rpx;
+        background: #1890FF;
+       box-sizing: border-box;
+border-radius: 44rpx;
         border: 2rpx solid rgba(5, 5, 5, 0.08);
         color: #fff;
-
+        
+font-size: 34rpx;
+font-family: PingFangSC-Medium, PingFang SC;
+font-weight: 500;
+color: #FFFFFF;
         &.p-btn-no {
           margin-top: 0;
           margin-bottom: 0;
           background: rgba(248, 248, 248, 1);
-          border: 2rpx solid rgba(5, 5, 5, 0.1);
+          border: 2rpx solid #C0C4CC;
           color: #000;
         }
       }

@@ -1,10 +1,10 @@
 <import src="../../components/mytips/mytips" />
 <view class="g-container p-container">
-  <navbar title="预约会议" showIcon="{{true}}"></navbar>
+  <!-- <navbar title="预约会议" showIcon="{{true}}"></navbar> -->
   <view class="p-body">
     <template is="mytips" data="{{ MyTips }}"></template>
     <view class="p-input-row">
-      <input class="p-input" type="text" placeholder="输入会议主题(默认会议)" placeholder-class="p-placeholder"
+      <input class="p-input" type="text" placeholder="请输入会议主题(默认会议1)" placeholder-class="p-placeholder"
         bindinput="handleMeetingName" value="{{meetingName}}" />
       <text class="p-numbers">{{len}}/20</text>
     </view>

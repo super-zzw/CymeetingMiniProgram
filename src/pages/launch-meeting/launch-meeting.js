@@ -21,12 +21,14 @@ Page(Object.assign({}, MyTips, {
   data: {
     isShowModal: false, // 是否显示试用结束的弹框
     isShowModal2: false, // 是否显示拨打客服电话的弹框
+    isShowModal3:false, //授权窗口
     isOpenPsw: false, // 密码明、暗文切换
     roomno: '', // 房间号
     meetingName: '', // 会议室昵称
     psw: '', // 密码
     len: 0, // 密码长度
-    formId: ''
+    formId: '',
+    toastContent:'' //弹出框内容
   },
 
   handleMeetingName(e) {
@@ -60,17 +62,31 @@ Page(Object.assign({}, MyTips, {
   // 发起会议
   async launchMeeting() {
     // eslint-disable-next-line sonarjs/no-redundant-boolean
-    if (app.globalData.isEntryMeetingPage && (await utils.getAuthSetting('record') != true)) {
-      utils.showToast({ title: '您还未开启录音权限，请前往开启', icon: 'none', duration: 3000 });
-      wx.openSetting({});
+    console.log(app.globalData.isFirstEntryMeetingPage)
+    if (app.globalData.isFirstEntryMeetingPage && (await utils.getAuthSetting('record') != true)) {
+    //   this.setData({toastContent:'您还未开启录音权限，请前往开启',
+    //   isShowModal3:true
+    // })
+    // utils.showToast({ title: '您还未开启摄像头权限，请前往开启', icon: 'none', duration: 3000 });
+    wx.authorize({
+      scope: 'scope.record',
+      success () {
+        // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+        // wx.startRecord()
+      }
+    })
+      // wx.openSetting({});
       return;
     }
     // eslint-disable-next-line sonarjs/no-redundant-boolean
-    if (app.globalData.isEntryMeetingPage && (await utils.getAuthSetting('camera') != true)) {
-      utils.showToast({ title: '您还未开启摄像头权限，请前往开启', icon: 'none', duration: 3000 });
-      setTimeout(() => {
-        wx.openSetting({});
-      }, 3000);
+    if (app.globalData.isFirstEntryMeetingPage && (await utils.getAuthSetting('camera') != true)) {
+      // utils.showToast({ title: '您还未开启摄像头权限，请前往开启', icon: 'none', duration: 3000 });
+      wx.authorize({
+        scope: 'scope.camera',
+        success () {
+          
+        }
+      })
       return;
     }
 
@@ -102,7 +118,19 @@ Page(Object.assign({}, MyTips, {
       console.log(error);
     }
   },
-
+//打开小程序设置页
+  handleOpenSetting(){
+    this.setData({
+            isShowModal3:false
+          })
+    // wx.openSetting({
+    //   success (res) {
+    //     this.setData({
+    //       isShowModal3:false
+    //     })
+    //   }
+    // })
+  },
   // 获取房间号
   async getRoomNo() {
     const ret = await request.post('/api/meeting/getRoomNo', { sessionId: utils.getStorage('sessionId') });

@@ -7,7 +7,7 @@
 @import "../../common/styles/variable.scss";
 
 .p-container {
-  background-color: #f1f1f1;
+  
   .mytips {
     position: fixed;
     top: 150rpx;
@@ -27,18 +27,19 @@
   .p-body {
     position: relative;
     .p-tab {
-      height: 360rpx;
-      background: #fff;
+      height: 316rpx;
       box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16rpx;
-      padding: 0 38rpx;
+      padding: 0 76rpx;
+      margin-top: 32rpx;
+      margin-bottom: 40rpx;
+      
 
       .p-tab-item {
         // flex: 1;
-        width: 160rpx;
+        // width: 160rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -59,8 +60,8 @@
         background-color: transparent;
 
         .p-btn-img {
-          width: 160rpx;
-          height: 160rpx;
+          width: 136rpx;
+          height: 136rpx;
           line-height: 1;
           border: none;
           border-radius: 100%;
@@ -71,11 +72,7 @@
           margin-bottom: 24rpx;
           background: #fafafa;
 
-          image {
-            width: 160rpx;
-            height: 160rpx;
-            line-height: 1;
-          }
+         
         }
 
         .p-btn-img::after {
@@ -89,14 +86,15 @@
           transition: all 0.3s;
         }
 
-        image {
-          width: 160rpx;
-          height: 160rpx;
+        .img {
+          width:100%;
+          height: 100%;
+          line-height: 1;
         }
 
         text {
           flex: 1;
-          font-size: $size28;
+          font-size: $size32;
           font-family: SFProText-Medium;
           font-weight: 500;
           color: $color35;
@@ -114,32 +112,43 @@
     }
 
     .p-list-box {
-      background-color: #fff;
-      box-sizing: border-box;
-      padding: 44rpx 0 0 44rpx;
-
+      padding: 40rpx;
+      margin-bottom: 40rpx;
       .p-list-title {
-        height: 42rpx;
-        font-size: $size30;
-        font-family: SFProText-Medium;
-        font-weight: 500;
-        color: #888;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32rpx;
+        
+      .p-title{
         display: flex;
         align-items: center;
-        box-sizing: border-box;
-        padding-right: 40rpx;
+        .p-icon{
+          width: 56rpx;
+          height: 56rpx;
+          margin-right: 6rpx;
+         }
+      }
+     
+          
+         
+
 
         .p-title {
-          flex: 1;
+          font-size: 32rpx;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #303133;
+            line-height: 44rpx;
         }
 
         .p-select-time {
-          width: 160rpx;
+          width: 100rpx;
           position: relative;
 
           .i-calendar {
-            width: 28rpx;
-            height: 28rpx;
+            width: 36rpx;
+            height: 36rpx;
             float: left;
             position: absolute;
             top: 50%;
@@ -153,7 +162,7 @@
             font-family: PingFangSC-Medium;
             font-weight: 500;
             text-align: right;
-            color: #0066e6;
+            color: #303133;
           }
         }
       }
@@ -161,134 +170,74 @@
       .p-list {
         margin-bottom: 16rpx;
 
-        &.p-list-bottom {
-          margin-bottom: 0;
-        }
+       
 
         .p-list-item {
           position: relative;
           box-sizing: border-box;
           height: 240rpx;
-          padding: 40rpx 0;
-
+          padding-bottom: 50rpx;
+          border-bottom: 2rpx solid #EAECF1;
+          margin-bottom: 52rpx;
           .p-list-item-title {
-            box-sizing: border-box;
-            padding-right: 40rpx;
-            display: flex;
-            align-items: center;
-            margin-bottom: 16rpx;
-
-            .i-mic {
-              width: 28rpx;
-              height: 36rpx;
-              margin-right: 12rpx;
-            }
-
-            .p-list-title-text {
-              max-width: 484rpx;
-              padding-right: 18rpx;
-              position: relative;
-              font-size: $size34;
-              font-family: SFProText-Medium;
-              color: $color35;
-              height: 48rpx;
-              line-height: 46rpx;
-            }
-
-            .p-list-item-order {
-              position: relative;
-              display: flex;
-              flex: 1;
-              align-items: center;
-              padding-left: 18rpx;
-              font-size: 28rpx;
-
-              .i-no {
-                width: 42rpx;
-                height: 20rpx;
-                margin-right: 4rpx;
-              }
-
-              .p-roomno {
-                display: flex;
-                flex: 1;
-                font-size: $size28;
-                font-family: SFProText-Regular;
-                font-weight: 400;
-                color: $color35;
-
-                &.p-roomno-cancel {
-                  color: #d9d9d9;
-                }
-              }
-            }
-
-            .p-list-item-order::after {
-              content: "";
-              display: block;
-              position: absolute;
-              left: 0;
-              top: 50%;
-              margin-top: -16rpx;
-              visibility: visible;
-              width: 4rpx;
-              height: 32rpx;
-              background-color: #f1f1f1;
-            }
+            
+font-size: 36rpx;
+font-family: PingFangSC-Medium, PingFang SC;
+font-weight: 500;
+color: #303133;
+line-height: 52rpx;
+overflow:hidden; //超出的文本隐藏
+text-overflow:ellipsis; //溢出用省略号显示
+white-space:nowrap; //溢出不换行
           }
 
           .p-list-item-people {
-            box-sizing: border-box;
-            height: 40rpx;
-            line-height: 40rpx;
-            font-size: $size28;
-            font-family: SFProText-Regular;
-            font-weight: 400;
-            color: $color8;
-            padding-right: 40rpx;
-            margin-bottom: 16rpx;
+           margin-top: 8rpx;
+           
+font-size: 30rpx;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+color: #606266;
+line-height: 44rpx;
+overflow:hidden; //超出的文本隐藏
+text-overflow:ellipsis; //溢出用省略号显示
+white-space:nowrap; //溢出不换行
           }
 
           .p-list-item-time {
-            font-size: $size28;
-
-            .p-list-item-time-text {
-              height: 48rpx;
-              line-height: 48rpx;
-              font-family: SFProText-Regular;
-              font-weight: 400;
-              color: #0066e6;
-
-              &.p-list-item-time-records-text {
-                color: #888;
-              }
-            }
-
-            .p-list-item-time-countdown {
-              height: 48rpx;
-              line-height: 48rpx;
-              background-color: #f1f1f1;
-              border-radius: 24rpx 0px 0px 24rpx;
-              padding: 0 30rpx;
-              color: #0066e6;
-              float: right;
-              &.p-list-item-time-subscribe-countdown {
-                background-color: rgba(255, 91, 91, 0.1);
-                &.p-list-item-time-countdown-weichaoshi {
-                  background: #e5effc;
-                }
-              }
-            }
-
-            &.p-list-item-timeout {
-              .p-list-item-time-text {
-                color: #ff5b5b;
-              }
-
-              .p-list-item-time-countdown {
-                color: #ff5b5b;
-              }
-            }
+           
+            margin-top: 30rpx;
+        
+font-size: 26rpx;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+color: #909399;
+line-height: 44rpx;
+display: flex;
+align-items: center;
+.tip{
+  padding: 0 10rpx;
+height: 44rpx;
+background: #E3F1FF;
+border-radius: 16rpx 0px 16rpx 0px;
+font-size: 26rpx;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+color: #1890FF;
+display: grid;
+place-items: center;
+margin-left: 30rpx;
+}
+&.notimeout{
+  color: #1890FF;
+}
+&.timeout{
+  color: #EB251E;
+  .tip{
+    background: #FFE7E6;
+    color: #EB251E;
+  }
+}
           }
 
           &.p-list-cancel {
@@ -319,24 +268,29 @@
             }
           }
         }
-
+        .p-list-item:last-child{
+          margin-bottom: 0;
+        }
         .p-look-more {
-          height: 96rpx;
+          width: 320rpx;
+          height: 60rpx;
           display: flex;
           align-items: center;
           justify-content: center;
-
+          margin: 0 auto;
+          border-radius: 38rpx;
+          border: 2rpx solid #1890FF;
           text {
             font-size: $size28;
             font-family: SFProText-Medium;
             font-weight: 500;
-            color: #0066e6;
+            color: #1890FF;
           }
 
           .i-more {
-            width: 20rpx;
-            height: 16rpx;
-            margin-left: 14rpx;
+            width: 32rpx;
+            height: 32rpx;
+            margin-left: 2rpx;
           }
 
           &.p-look-more-bottom {
@@ -353,8 +307,8 @@
           padding-bottom: 298rpx;
 
           image {
-            width: 248rpx;
-            height: 178rpx;
+            width: 208rpx;
+            height: 208rpx;
             margin-bottom: 32frpx;
           }
 
@@ -364,7 +318,8 @@
             font-size: 30rpx;
             font-family: SFProText-Regular;
             font-weight: 400;
-            color: rgba(53, 53, 53, 1);
+            color: #909399;
+            margin-top: 20rpx;
           }
         }
       }

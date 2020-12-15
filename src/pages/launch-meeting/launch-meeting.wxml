@@ -1,15 +1,16 @@
 <wxs src="../../common/wxs/tools.wxs" module="tools" />
 <import src="../../components/mytips/mytips" />
 <view class="g-container p-container">
-  <navbar title="保利威云会议" showIcon="{{true}}"></navbar>
+  <!-- <navbar title="保利威云会议" showIcon="{{true}}"></navbar> -->
   <view class="p-body">
     <template is="mytips" data="{{ MyTips }}"></template>
     <view class="p-input-row">
-      <image class="i-no" src="/images/join-meeting/no-large@2x.png"></image>
-      <text class="p-room-num">{{tools.formatRoomNo(roomno)}}</text>
+      <text class="i-no">NO.</text>
+      <text class="p-room-num">{{roomno}}</text>
+      <!-- <text class="p-room-num">999000</text> -->
     </view>
     <view class="p-input-row">
-      <input class="p-input" type="text" maxlength="20" placeholder="输入会议主题(默认会议)" placeholder-class="p-placeholder"
+      <input class="p-input" type="text" maxlength="20" placeholder="输入会议主题(默认会议1)" placeholder-class="p-placeholder"
         bindinput="handleMeetingName" value="{{meetingName}}" />
       <text class="p-numbers">{{len}}/20</text>
     </view>
@@ -35,6 +36,17 @@
   <modal show="{{isShowModal2}}" cancelText="取消" confirmText="呼叫" bindcancel="bindCancel2" bindconfirm='bindConfirm2'>
     <view class='p-modal-content'>
       <view class="p-modal-title">400 12345652</view>
+    </view>
+  </modal>
+
+  <modal show="{{isShowModal3}}" cancelBtn="{{false}}" confirmBtn="{{false}}">
+    <view class='p-modal-content'>
+      <view class="p-modal-title">{{toastContent}}</view>
+      <view class="p-btn-box">
+        <button bindtap="bindCancel2">取消</button>
+        <button class="p-btn-phone" open-type="openSetting" bindopensetting="handleOpenSetting"
+          data-type="{{btnClickType}}">好的</button>
+      </view>
     </view>
   </modal>
 

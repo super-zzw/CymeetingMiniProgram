@@ -15,7 +15,7 @@
 const MyTips = require('@components/mytips/mytips');
 import api from '../../common/api/index';
 const regeneratorRuntime = require('@lib/regenerator-runtime/regenerator-runtime');
-import RTC from '@common/rtc/rtc';
+import RTC from '../../common/rtc/rtc';
 import Chat from '../../common/chat/chat';
 import { initChat, emitToPaintEvent, disconnectSocket } from '../../common/chat/initChat';
 import { getAppID, getMeetingDetail } from '../../common/utils/getMeetingMessage';
@@ -78,7 +78,7 @@ Page(Object.assign({}, MyTips, {
       isIphoneX: app.globalData.isIphoneX
     });
     await getMeetingDetail(meetingId);
-    if (utils.getStorage('sessionId')) await getAppID();
+    // if (utils.getStorage('sessionId')) await getAppID();
   },
 
   async onReady() {
@@ -499,6 +499,7 @@ Page(Object.assign({}, MyTips, {
       const res = await client.init(this.data.roomno);
       this.subscribeEvents(client);
       this.data.client.setRole('broadcaster');
+      console.log(res)
       client.join(res.connect_channel_key, res.channelId, this.data.uid, (uid) => {
         console.log(utils.mklog(), '加入客户端 join channel success===', this.data.uid);
         client.publish(async url => {

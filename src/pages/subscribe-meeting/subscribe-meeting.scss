@@ -47,32 +47,36 @@ page {
 
       .p-input-row:before {
         content: "";
-        width: 1340rpx;
-        height: 4px;
+        width: 100%;
+        height: 2px;
         position: absolute;
         bottom: 0;
         z-index: 0;
-        border-bottom: 1px solid #f1f1f1;
-        transform: scale(0.5);
-        transform-origin: 0 0;
+        border-bottom: 1px solid#E7E6E6;
+        // transform: scale(0.5);
+        // transform-origin: 0 0;
         box-sizing: border-box;
       }
 
       .p-btn {
         width: 670rpx;
-        height: 94rpx;
-        line-height: 94rpx;
+        height: 88rpx;
+        line-height: 88rpx;
         text-align: center;
         margin-top: 64rpx;
         background: rgba(0, 102, 230, 1);
-        border-radius: 10rpx;
+        
+border-radius: 44rpx;
         opacity: 0.4;
         border: 2rpx solid rgba(5, 5, 5, 0.08);
         font-size: 36rpx;
         font-family: PingFangSC-Regular;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
-
+        position: fixed;
+        bottom: 34rpx;
+        left: 50%;
+        transform: translateX(-50%);
         &.p-active {
           opacity: 1;
         }

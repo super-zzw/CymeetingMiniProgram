@@ -33,7 +33,7 @@ Page({
     isShowModal3: false, // 是否显示试用结束的弹框
     isShowModal4: false, // 是否显示拨打电话的弹框
     isShowModal5: false, // 是否显示体验结束的弹框
-    isFiltered: false, // 是否隐藏筛选时间的按钮，默认不隐藏
+    isFiltered: true, // 是否隐藏筛选时间的按钮，默认不隐藏
     btnClickType: '', // 按钮点击的类型：subscribe：跳转预约会议详情，records:跳转会议记录详情，join-meeting: 加入会议，launch-meeting：发起会议，subscribe-meeting:预约会议
     page1: 0, // 我的预约列表页码
     pageSize1: 5, // 我的预约列表每页数量
@@ -43,8 +43,9 @@ Page({
     pageSize2: 10, // 会议记录每页数量
     total2: 0, // 会议记录总数
     isCanRequest2: true, // 是否可以发起获取获取会议记录列表的请求，默认为true
-    mySubscribeList: [], // 预约列表
-    meetingRecordsList: [], // 会议记录列表
+    mySubscribeList:[{title:111,members:'王兵、张强、刘鹏、马莎、红果果、王兵、张强、刘鹏、马莎、红果果、王兵、张强、刘鹏、马莎、红果果',date:'09:00-09:45	2020/12/20'}], // 预约列表
+    meetingRecordsList: [{title:111,members:'王兵、张强、刘鹏、马莎、红果果、王兵、张强、刘鹏、马莎、红果果、王兵、张强、刘鹏、马莎、红果果',
+    date:'09:00-09:45	2020/12/20'}], // 会议记录列表
     selectDate: '', // 筛选时间
     endDate: '', // 预约的结束时间
     ongoingMeetingDetail: {}, // 正在进行中的会议详情
@@ -126,13 +127,14 @@ Page({
     const { detail: { errMsg, userInfo } } = e;
     const { currentTarget: { dataset: { type } } } = e;
     that.setData({ btnClickType: type });
-
+    console.log(e)
     if (errMsg == 'getUserInfo:ok') {
       app.globalData.userInfo = e.detail.userInfo;
       that.setData({ userInfo: userInfo });
 
       wx.login({
         async success(res) {
+          console.log(res)
           if (res.code) {
             utils.showLoading('授权中');
             const ret = await request.post('/api/user/wxappLogin', {
@@ -425,8 +427,8 @@ Page({
   // 初始化变量
   initStatus() {
     this.setData({
-      mySubscribeList: [],
-      meetingRecordsList: [],
+      // mySubscribeList: [],
+      // meetingRecordsList: [],
       isCanRequest1: true,
       isCanRequest2: true,
       page1: 0,
@@ -531,7 +533,7 @@ Page({
       date: utils.formatTime(),
       userInfo: utils.getStorage('userInfo'),
       endDate: year + '-' + month + '-' + day,
-      isFiltered: false
+      // isFiltered: false
     });
 
     this.initStatus();

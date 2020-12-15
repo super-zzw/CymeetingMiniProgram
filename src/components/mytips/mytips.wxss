@@ -36,5 +36,6 @@
 
 .c-mytips .c-mytips-box.c-mytips-error {
   /* background: linear-gradient(top, rgba(230, 67, 64, 1) rgba(255, 91, 91, 1)); */
+  /* background: rgba(230, 67, 64, 1); */
   background: rgba(230, 67, 64, 1);
 }

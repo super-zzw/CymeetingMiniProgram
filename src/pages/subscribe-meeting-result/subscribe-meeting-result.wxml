@@ -1,5 +1,5 @@
 <view class="g-container p-container">
-  <navbar title="保利威云会议" showIcon="{{true}}"></navbar>
+  <!-- <navbar title="保利威云会议" showIcon="{{true}}"></navbar> -->
   <view class="p-body">
     <view class="i-success">
       <image src="/images/subscribe-meeting/icon-success@2x.png"></image>

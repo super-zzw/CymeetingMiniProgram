@@ -17,20 +17,20 @@ page {
         font-size: 30rpx;
         font-family: SFProText-Regular;
         font-weight: 400;
-        color: rgba(136, 136, 136, 1);
+        color: #909399 ;
         line-height: 36rpx;
-        margin-bottom: 58rpx;
+        margin-bottom: 20rpx;
         text-align: center;
       }
 
       .p-invite-theme {
         height: 74rpx;
-        font-size: 52rpx;
+       
+font-size: 44rpx;
         font-family: SFProText-Regular;
         font-weight: 400;
-        color: rgba(53, 53, 53, 1);
-        line-height: 62rpx;
-        margin-bottom: 12rpx;
+        color: #181819;
+       
         text-align: center;
         box-sizing: border-box;
         padding: 0 40rpx;
@@ -38,28 +38,36 @@ page {
 
       .p-invite-no {
         display: flex;
-        align-items: center;
+       align-items: flex-end;
         justify-content: center;
-        margin-bottom: 68rpx;
-
-        .i-no {
-          width: 52rpx;
-          height: 28rpx;
-          margin-right: 6rpx;
-        }
+      
+        margin-top: 44rpx;
         text {
-          font-size: 34rpx;
-          font-family: SFProText-Regular;
-          font-weight: 400;
-          color: rgba(53, 53, 53, 1);
-          line-height: 40rpx;
+         
+          font-size: 56rpx;
+          font-family: PingFangSC-Medium, PingFang SC;
+          font-weight: 500;
+          color: #181819;
+          line-height: 56rpx;
+                  }
+        .i-no {
+         
+font-size: 36rpx;
+font-family: PingFangSC-Medium, PingFang SC;
+font-weight: 500;
+color: #909399;
+line-height: 40rpx;
         }
+
       }
 
       .p-box {
+       
         box-sizing: border-box;
-        padding-left: 126rpx;
-        padding-right: 136rpx;
+        margin: 60rpx 76rpx 0;
+        padding:40rpx;
+background: #F1F8FF;
+border-radius: 12rpx;
         .p-box-item {
           display: flex;
           // align-items: center;
@@ -73,7 +81,7 @@ page {
             font-weight: 400;
             color: rgba(136, 136, 136, 1);
             // line-height: 36rpx;
-
+            margin-right: 30rpx;
             &.p-label-subscribe {
               width: 168rpx;
             }
@@ -81,12 +89,11 @@ page {
 
           text {
             flex: 1;
-            font-size: 30rpx;
-            font-family: PingFangSC-Regular;
-            font-weight: 400;
-            color: rgba(53, 53, 53, 1);
-            line-height: 46rpx;
-            vertical-align: top;
+          
+font-size: 32rpx;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+color: #181819;
           }
 
           .p-vertical-top {
@@ -107,19 +114,23 @@ page {
         //   margin-bottom: 62rpx;
         // }
       }
-
+  .p-btns{
+     position: fixed;
+     bottom: 54rpx;
+     margin:0 32rpx;
+  }
       .p-btn {
         width: 670rpx;
         height: 96rpx;
         line-height: 96rpx;
         text-align: center;
-        margin: 110rpx auto 30rpx;
-        background: rgba(0, 102, 230, 1);
+        margin-bottom: 32rpx;
+        background: #1890FF;
         border-radius: 10rpx;
-        border: 2rpx solid rgba(5, 5, 5, 0.08);
         color: #fff;
         border: none;
 
+        border-radius: 44rpx;
         &.p-btn-disabled {
           background: rgba(0, 102, 230, 0.4);
         }
@@ -127,8 +138,9 @@ page {
         &.p-btn-no {
           margin-top: 0;
           background: rgba(248, 248, 248, 1);
-          border: 2rpx solid rgba(5, 5, 5, 0.1);
-          color: #000;
+         
+border: 2rpx solid #C0C4CC;;
+          color:#303133;
         }
       }
     }

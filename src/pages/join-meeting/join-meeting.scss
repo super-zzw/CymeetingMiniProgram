@@ -8,11 +8,11 @@ page {
     box-sizing: border-box;
     background-color: #fff;
     .p-body {
-      padding: 120rpx 40rpx 0 40rpx;
+     margin: 48rpx 32rpx;
       .p-input-row {
         position: relative;
         height: 96rpx;
-        margin-bottom: 32rpx;
+        margin-bottom: 24rpx;
         display: flex;
         align-items: center;
 
@@ -40,22 +40,21 @@ page {
         .i-psw {
           position: absolute;
           right: 0;
-          width: 48rpx;
-          height: 48rpx;
+          width: 56rpx;
+          height: 56rpx;
           z-index: 666;
         }
       }
 
       .p-input-row:after {
         content: "";
-        width: 1340rpx;
+        width: 100%;
         height: 2px;
         position: absolute;
         bottom: 0;
         z-index: 0;
-        border-bottom: 1px solid #f1f1f1;
-        transform: scale(0.5);
-        transform-origin: 0 0;
+        border-bottom: 2rpx solid #E7E6E6;
+      
         box-sizing: border-box;
       }
 
@@ -78,19 +77,24 @@ page {
 
       .p-btn {
         width: 670rpx;
-        height: 96rpx;
-        line-height: 96rpx;
+        height: 88rpx;
+        line-height: 88rpx;
         text-align: center;
-        margin-top: 64rpx;
+     
         background: rgba(0, 102, 230, 1);
-        border-radius: 10rpx;
+     
         opacity: 0.4;
         border: 2rpx solid rgba(5, 5, 5, 0.08);
         font-size: 36rpx;
         font-family: PingFangSC-Regular;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
-        border: none;
+       
+background: #96CDFF;
+border-radius: 44rpx;
+position: fixed;
+bottom: 34rpx;
+
 
         &.p-active {
           opacity: 1;

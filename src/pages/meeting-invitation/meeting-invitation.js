@@ -21,24 +21,29 @@ Page({
     isBingMobile: '', // 是否绑定手机
     meetingId: '', // 会议id
     inviteNickName: '', // 邀请昵称
-    meetingDetail: {}, // 会议详情
+    meetingDetail: {
+      type:2,
+      conferees:'红果果、王兵、张强、刘鹏、马莎',
+      status:1,
+      
+    }, // 会议详情
     formId: ''
   },
 
   onLoad(opt) {
-    const { meetingId, inviteNickName } = opt;
-    this.setData({
-      meetingId: meetingId,
-      inviteNickName: inviteNickName
-    });
+    // const { meetingId, inviteNickName } = opt;
+    // this.setData({
+    //   meetingId: meetingId,
+    //   inviteNickName: inviteNickName
+    // });
   },
 
   onShow() {
-    this.setData({
-      sessionId: utils.getStorage('sessionId'),
-      isBindMobile: utils.getStorage('isBindMobile')
-    });
-    this.getMeetingDetail();
+    // this.setData({
+    //   sessionId: utils.getStorage('sessionId'),
+    //   isBindMobile: utils.getStorage('isBindMobile')
+    // });
+    // this.getMeetingDetail();
   },
 
   // 获取分享的会议详情

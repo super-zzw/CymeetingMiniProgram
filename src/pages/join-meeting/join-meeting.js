@@ -191,17 +191,17 @@ Page(Object.assign({}, MyTips, {
   },
 
   onLoad(opt) {
-    const { meetingId, roomno } = opt;
-    this.setData({
-      meetingId: meetingId ? meetingId : '',
-      roomNo: roomno ? roomno : ''
-    });
+    // const { meetingId, roomno } = opt;
+    // this.setData({
+    //   meetingId: meetingId ? meetingId : '',
+    //   roomNo: roomno ? roomno : ''
+    // });
   },
 
   onShow() {
-    this.setData({
-      sessionId: utils.getStorage('sessionId'),
-      meetingName: utils.getStorage('userInfo').nickName ? utils.getStorage('userInfo').nickName : ''
-    });
+    // this.setData({
+    //   sessionId: utils.getStorage('sessionId'),
+    //   meetingName: utils.getStorage('userInfo').nickName ? utils.getStorage('userInfo').nickName : ''
+    // });
   }
 }));
