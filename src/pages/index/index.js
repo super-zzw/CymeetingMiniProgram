@@ -43,9 +43,7 @@ Page({
     pageSize2: 10, // 会议记录每页数量
     total2: 0, // 会议记录总数
     isCanRequest2: true, // 是否可以发起获取获取会议记录列表的请求，默认为true
-    mySubscribeList:[{title:111,members:'王兵、张强、刘鹏、马莎、红果果、王兵、张强、刘鹏、马莎、红果果、王兵、张强、刘鹏、马莎、红果果',date:'09:00-09:45	2020/12/20'}], // 预约列表
-    meetingRecordsList: [{title:111,members:'王兵、张强、刘鹏、马莎、红果果、王兵、张强、刘鹏、马莎、红果果、王兵、张强、刘鹏、马莎、红果果',
-    date:'09:00-09:45	2020/12/20'}], // 会议记录列表
+    mySubscribeList:[], // 会议记录列表
     selectDate: '', // 筛选时间
     endDate: '', // 预约的结束时间
     ongoingMeetingDetail: {}, // 正在进行中的会议详情
@@ -319,14 +317,17 @@ Page({
           chat.sendSocketMessage(sendData, 'customMessage');
         }
       } else {
-        utils.showToast({ title: ret.message, icon: 'none' });
+        utils.showToast({ title: ret.message, icon: 'none'
+      
+    
+    });
       }
     } catch (error) {
 
     }
 
     // 结束画板
-    if (parseInt(this.data.ongoingMeetingDetail.isHost) === 1) api.closeMeetingPPT(this.data.ongoingMeetingDetail.roomNo);
+    // if (parseInt(this.data.ongoingMeetingDetail.isHost) === 1) api.closeMeetingPPT(this.data.ongoingMeetingDetail.roomNo);
     disconnectSocket();
   },
 
@@ -368,7 +369,7 @@ Page({
     that.setData({
       page1: that.data.page1 + 1
     });
-    const ret = await request.post('/api/user/mySubscribe', { sessionId: utils.getStorage('sessionId'), pageNum: that.data.page1, pageSize: that.data.pageSize1 });
+    const ret = await request.post('/api/user/mySubscribe', {  pageNum: that.data.page1, pageSize: that.data.pageSize1 });
     try {
       if (ret.code == config.successCode) {
         that.setData({
@@ -450,7 +451,7 @@ Page({
             isShowModal: true
           });
           try {
-            if (utils.getStorage('sessionId')) await getAppID();
+            // if (utils.getStorage('sessionId')) await getAppID();
           } catch (error) {
 
           }

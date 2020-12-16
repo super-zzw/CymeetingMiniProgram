@@ -499,7 +499,6 @@ Page(Object.assign({}, MyTips, {
       const res = await client.init(this.data.roomno);
       this.subscribeEvents(client);
       this.data.client.setRole('broadcaster');
-      console.log(res)
       client.join(res.connect_channel_key, res.channelId, this.data.uid, (uid) => {
         console.log(utils.mklog(), '加入客户端 join channel success===', this.data.uid);
         client.publish(async url => {
@@ -1048,7 +1047,8 @@ Page(Object.assign({}, MyTips, {
     const topic = this.data.meetingDetail.topic;
     if (parseInt(isHost) === 1) emitToPaintEvent({ roomId: channelId });
     if (!nickName || !avatarUrl || !channelId) return console.error(`加入会议数据不足,nickName:${nickName},avatarUrl:${avatarUrl},channelId:${channelId}`);
-    utils.reLaunch(`/pages/ppt/ppt?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
+    utils.reLaunch(`/pages/whiteBoard/whiteBoard?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
+    // utils.reLaunch(`/pages/ppt/ppt?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
     this.setData({ changeViewModeStyle: '' });
   },
 

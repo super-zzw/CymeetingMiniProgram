@@ -29,6 +29,7 @@
     "pump": "^3.0.0"
   },
   "dependencies": {
-    "gulp-imagemin": "^7.1.0"
+    "gulp-imagemin": "^7.1.0",
+    "white-web-sdk": "^2.11.7"
   }
 }

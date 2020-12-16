@@ -23,8 +23,8 @@ const post = (url, data) => {
       data: data,
       method: 'POST',
       header: {
-        'cyou-meeting-session-id': utils.getStorage('sessionId'),
-        'cyou-meeting-client-type': 'wxapp'
+        'cy-meeting-session-id': utils.getStorage('sessionId'),
+        'cy-meeting-client-type': 'wxapp'
       },
       success(res) {
         resolve(res.data);

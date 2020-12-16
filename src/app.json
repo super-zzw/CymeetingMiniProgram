@@ -8,7 +8,8 @@
     "pages/meeting-invitation/meeting-invitation",
     "pages/subscribe-meeting-detail/subscribe-meeting-detail",
     "pages/meeting/meeting",
-    "pages/ppt/ppt"
+    "pages/ppt/ppt",
+    "pages/whiteBoard/whiteBoard"
   ],
   "window": {
     "backgroundColorTop": "#fff",

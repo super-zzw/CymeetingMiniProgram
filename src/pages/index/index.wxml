@@ -118,7 +118,7 @@
           </view>
          </view>
         <view class="p-look-more {{isIphoneX ? 'p-look-more-bottom' : ''}}" bindtap="lookeMoreMeetingRecords"
-         
+         wx:if="{{total2>page2*pageSize2}}"
           >
           <text>查看更多</text>
           <image class="i-more" src="/images/index/ic-more@2x.png"></image>
