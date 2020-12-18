@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://git.polyv.net/CloudMeeting/PolyvCloudMeetingMiniProgram"
+    "url": "https://git.code.tencent.com/cymeeting/CymeetingMiniProgram"
   },
   "author": "Polyv frontend team",
   "private": true,

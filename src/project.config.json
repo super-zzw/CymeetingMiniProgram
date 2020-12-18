@@ -4,7 +4,7 @@
     "ignore": []
   },
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": true,
     "postcss": true,
     "minified": true,
@@ -13,8 +13,8 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.7.1",
-  "appid": "wx1d88caa38c4f6023",
-  "projectname": "%E4%BA%91%E4%BC%9A%E8%AE%AE",
+  "appid": "wx54ccd187c56bae50",
+  "projectname": "辰悠云会议",
   "debugOptions": {
     "hidedInDevtools": []
   },

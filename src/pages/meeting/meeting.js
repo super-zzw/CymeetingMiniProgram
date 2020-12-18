@@ -1071,9 +1071,10 @@ Page(Object.assign({}, MyTips, {
     const { nickName, avatarUrl } = utils.getStorage('userInfo');
     const channelId = this.data.roomno;
     const topic = this.data.meetingDetail.topic;
+    const netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
     if (parseInt(isHost) === 1) emitToPaintEvent({ roomId: channelId });
     if (!nickName || !avatarUrl || !channelId) return console.error(`加入会议数据不足,nickName:${nickName},avatarUrl:${avatarUrl},channelId:${channelId}`);
-    utils.reLaunch(`/pages/white-board/white-board?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
+    utils.navigateTo(`/pages/white-board/white-board?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}&netLessRoomUuid=${netLessRoomUuid}`);
     // utils.reLaunch(`/pages/ppt/ppt?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
     this.setData({ changeViewModeStyle: '' });
   },
