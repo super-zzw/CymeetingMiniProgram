@@ -1,11 +1,13 @@
-
-// import  whiteWebSdk  from "@lib/white-web-sdk";
-
-// var WhiteWebSdk = require("../../lib/white-web-sdk/src");
-//  whiteWebSdk = new WhiteWebSdk({
-//     appIdentifier: 'GzczoDt_EeuIHrEufR7KaQ/_7XFxXiZRi8xSg', // 从管理控制台获取 App Identifier
-// });
+// import WhiteWebSdk from '../../lib/white-web-sdk/white-web-sdk'
+// var utils=require('../../lib/white-web-sdk/white-web-sdk')
+import regeneratorRuntime from '../../common/regenerator-runtime/runtime-module';
 Page({
+    async onLoad(){
+        await this.createRoom()
+    },
+    data:{
+        room:123
+    },
 createRoom(){
     let uuid
     wx.request({
@@ -36,9 +38,13 @@ createRoom(){
                     roomToken: res.data,
                 };
                 console.log(res)
+                // var whiteWebSdk = new utils.WhiteWebSdk();
                 // whiteWebSdk.joinRoom(joinRoomParams).then(function(room) {
+                //     this.setData({
+                //         room:room
+                //     })
                 //     // 加入房间成功，获取 room 对象
-                //     room.bindHtmlElement(this.$refs.whiteboard);
+                //     room.bindHtmlElement(document.getElementById("whiteboard"));
                 // }).catch(function(err) {
                 //     // 加入房间失败
                 //     console.error(err);
@@ -55,8 +61,5 @@ createRoom(){
     })
 },
 
-async onLoad(){
-    // console.log(whiteWebSdk)
-    await this.createRoom()
-}
+
 })

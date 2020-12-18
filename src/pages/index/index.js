@@ -40,7 +40,7 @@ Page({
     total1: 0, // 我的预约列表总数
     isCanRequest1: true, // 是否可以发起获取预约列表的请求，默认为true
     page2: 0, // 会议记录页码
-    pageSize2: 10, // 会议记录每页数量
+    pageSize2: 5, // 会议记录每页数量
     total2: 0, // 会议记录总数
     isCanRequest2: true, // 是否可以发起获取获取会议记录列表的请求，默认为true
     mySubscribeList:[], // 会议记录列表

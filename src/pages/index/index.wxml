@@ -60,7 +60,7 @@
       </view>
 
     </view>
-    <view class="p-list-box box" >
+    <view class="p-list-box box" wx:if="{{mySubscribeList.length}}">
       <view class="p-list-title">
          <view class="p-title">
           <image class="p-icon" src="/images/index/yuyue.png"/>我的预约
@@ -69,17 +69,17 @@
       <view class="p-list">
         <view class="p-list-item g-border-670" wx:for="{{mySubscribeList}}" wx:key="index" bindtap="skipPage">
          <view class="p-list-item-title">
-             {{item.title}}
+             {{item.topic}}
           </view>
           <view class="p-list-item-people">
-            {{item.members}}
+            {{item.conferee}}
           </view>
           <!-- <view class="p-list-item-time notimeout">
             {{item.date}}
             <view class="tip">4天后</view>
           </view> -->
           <view class="p-list-item-time timeout">
-            {{item.date}}
+            {{item.times+' '+item.beginDate}}
             <view class="tip">已超时</view>
           </view>
         </view>
@@ -108,13 +108,13 @@
           wx:key="index" bindtap="skipPage" data-type="records" data-roomno="{{item.roomNo}}"
           data-id="{{item.meetingId}}" data-status="{{item.isCancel}}">
           <view class="p-list-item-title">
-             {{item.title}}
+             {{item.topic}}
           </view>
           <view class="p-list-item-people">
-            {{item.members}}
+            {{item.conferee}}
           </view>
           <view class="p-list-item-time">
-            {{item.date}}
+            {{item.times+' '+item.beginDate}}
           </view>
          </view>
         <view class="p-look-more {{isIphoneX ? 'p-look-more-bottom' : ''}}" bindtap="lookeMoreMeetingRecords"

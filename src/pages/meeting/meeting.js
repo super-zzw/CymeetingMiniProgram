@@ -24,8 +24,9 @@ const request = require('@common/request/request');
 const utils = require('@common/utils/utils');
 const Layouter = require('@common/utils/layout');
 const config = require('@common/config');
+// const AgoraRTC = require('@lib/agora-miniapp-sdk/Agora_Miniapp_SDK_for_WeChat');
 const app = getApp();
-
+// let client = new AgoraRTC.Client();
 Page(Object.assign({}, MyTips, {
   data: {
     // 会议中的变量
@@ -494,11 +495,12 @@ Page(Object.assign({}, MyTips, {
     const that = this;
     const client = new RTC();
     this.setData({ client: client });
-
     return new Promise(async (resolve, reject) => {
       const res = await client.init(this.data.roomno);
+    //   console.log(res)
       this.subscribeEvents(client);
       this.data.client.setRole('broadcaster');
+    
       client.join(res.connect_channel_key, res.channelId, this.data.uid, (uid) => {
         console.log(utils.mklog(), '加入客户端 join channel success===', this.data.uid);
         client.publish(async url => {
@@ -514,6 +516,30 @@ Page(Object.assign({}, MyTips, {
       });
     });
   },
+  // async initAgoraChannel() {
+  //   const that = this;
+  //   const client = new RTC();
+  //   this.setData({ client: client });
+  //   return new Promise(async (resolve, reject) => {
+  //     const res = await client.init(this.data.roomno);
+  //     this.subscribeEvents(client);
+  //     this.data.client.setRole('broadcaster');
+    
+  //     client.join(res, this.data.roomno, this.data.uid, (uid) => {
+  //       console.log(utils.mklog(), '加入客户端 join channel success===', this.data.uid);
+  //       client.publish(async url => {
+  //         resolve(url);
+  //         that.handleMicOrCam();
+  //       }, e => {
+  //         console.log(utils.mklog(), `client publish failed: ${e.code} ${e.reason}`);
+  //         reject(e);
+  //       });
+  //     }, e => {
+  //       console.log(utils.mklog(), `client join channel failed: ${e.code} ${e.reason}`);
+  //       reject(e);
+  //     });
+  //   });
+  // },
 
   // 添加流
   /**
@@ -1047,7 +1073,7 @@ Page(Object.assign({}, MyTips, {
     const topic = this.data.meetingDetail.topic;
     if (parseInt(isHost) === 1) emitToPaintEvent({ roomId: channelId });
     if (!nickName || !avatarUrl || !channelId) return console.error(`加入会议数据不足,nickName:${nickName},avatarUrl:${avatarUrl},channelId:${channelId}`);
-    utils.reLaunch(`/pages/whiteBoard/whiteBoard?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
+    utils.reLaunch(`/pages/white-board/white-board?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
     // utils.reLaunch(`/pages/ppt/ppt?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
     this.setData({ changeViewModeStyle: '' });
   },

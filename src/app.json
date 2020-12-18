@@ -9,7 +9,7 @@
     "pages/subscribe-meeting-detail/subscribe-meeting-detail",
     "pages/meeting/meeting",
     "pages/ppt/ppt",
-    "pages/whiteBoard/whiteBoard"
+    "pages/white-board/white-board"
   ],
   "window": {
     "backgroundColorTop": "#fff",
