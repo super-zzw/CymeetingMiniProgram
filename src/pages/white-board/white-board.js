@@ -13,7 +13,7 @@ Page({
         appIdentifier:"",
         netLessRoomUuid:"",
         roomToken:"",
-        webViewBaseUrl:"http://192.168.1.5:8080"
+        webViewBaseUrl:"http://192.168.1.10:8083"
     },
     async onLoad(opt){
         console.log(opt)
