@@ -795,6 +795,7 @@ class Chat {
     this.socket.emit('message', JSON.stringify(data));
   }
 
+  //点赞
   sendLike(times) {
     const options = this.options;
     const data = {
@@ -807,6 +808,7 @@ class Chat {
     this.socket.emit('message', JSON.stringify(data));
   }
 
+  //设置昵称
   setNick(nick) {
     const options = this.options;
     const data = {
@@ -1058,6 +1060,7 @@ class Chat {
     api.removeHistoryUrl(id, options);
   }
 
+  //清除聊天记录
   cleanHistoryMessage() {
     const options = this.options;
     const data = {
@@ -1074,6 +1077,7 @@ class Chat {
     return api.checkCurrentStatus(this.options.roomId);
   }
 
+  //送花
   sendFlower(count) {
     const options = this.options;
     const data = {
