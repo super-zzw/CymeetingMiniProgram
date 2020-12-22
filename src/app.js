@@ -47,18 +47,17 @@ App({
 
       this.globalData.wxScoket.onMessage(data => {
         //返回判断是否是本人
-        console.log("收到ws数据:",data)
+        console.log("收到ws数据:",data);
       })
 
       this.globalData.wxScoket.onOpen(() => {
         console.log('WebSocket已连接')
-        
       })
       this.globalData.wxScoket.onError((emsg) => {
         console.log("WebSocket连接出错：",emsg)
       })
-      this.globalData.wxScoket.onClose(() => {
-        console.log('WebSocket关闭连接连接')
+      this.globalData.wxScoket.onClose((msg) => {
+        console.log('WebSocket关闭连接连接:',msg)
       })
     }
 

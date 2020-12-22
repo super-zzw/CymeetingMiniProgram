@@ -14,7 +14,7 @@
 import api from '../../common/api/index';
 import store from '../../store/index';
 import { initChat, disconnectSocket } from '../../common/chat/initChat';
-import { getAppID } from '../../common/utils/getMeetingMessage';
+import { getAppID,getScoketToken } from '../../common/utils/getMeetingMessage';
 const regeneratorRuntime = require('@lib/regenerator-runtime/regenerator-runtime');
 const request = require('@common/request/request');
 const utils = require('@common/utils/utils');
@@ -150,7 +150,7 @@ Page({
                 try {
                   if (utils.getStorage('sessionId')){
                     await getAppID();
-                    await that.getScoketToken();  //登录成果获取socketToken
+                    await that.initToken();  //登录成果获取socketToken
                   }
                   
                 } catch (error) { }
@@ -206,29 +206,21 @@ Page({
     }
   },
   // 建立wxSocket
-  async getScoketToken(){
-    let res = await request.post("/api/user/get/socket/token");
-    try {
-      if(res && res.code == "200000"){
-        app.globalData.socketToken = res.data;
-        await app.initSocket();
-        setTimeout(() => {
-          app.sendWxSocket(
-            JSON.stringify({
-              "acceptWuserId":2,
-              "event":"VIEW_AGORA",
-              "meetingId":1,
-              "nickName":"昵称",
-              "remark":"切换为声网",
-              "timeStamp":"1608368361218"}
-            )
-          )
-        }, 2000);
-        
-      }
-    } catch (error) {
-      console.log(error)
-    }
+  async initToken(){
+    app.globalData.socketToken = await getScoketToken();
+    await app.initSocket();
+    setTimeout(() => {
+      app.sendWxSocket(
+        JSON.stringify({
+          "acceptWuserId":2,
+          "event":"VIEW_AGORA",
+          "meetingId":1,
+          "nickName":"昵称",
+          "remark":"切换为声网",
+          "timeStamp":"1608368361218"}
+        )
+      )
+    }, 2000);
   },
 
   // 获取手机号回调
@@ -575,7 +567,7 @@ Page({
       // 获取正在进行中的会议信息
       this.getOngoingMeeting();
 
-      this.getScoketToken();  //获取socketToken
+      this.initToken();  //获取socketToken
     }
   },
   onShareAppMessage() {
