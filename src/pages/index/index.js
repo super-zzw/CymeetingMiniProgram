@@ -148,7 +148,11 @@ Page({
             try {
               if (ret.code == config.successCode) {
                 try {
-                  if (utils.getStorage('sessionId')) await getAppID();
+                  if (utils.getStorage('sessionId')){
+                    await getAppID();
+                    await that.getScoketToken();  //登录成果获取socketToken
+                  }
+                  
                 } catch (error) { }
                 that.setData({
                   isBindMobile: ret.data.isBindMobile,
@@ -187,7 +191,9 @@ Page({
                     utils.navigateTo('/pages/join-meeting/join-meeting');
                   }
                 }
-
+                
+                
+                
               } else {
                 utils.showToast({ title: ret.message, icon: 'none' });
               }
@@ -197,6 +203,31 @@ Page({
           }
         }
       });
+    }
+  },
+  // 建立wxSocket
+  async getScoketToken(){
+    let res = await request.post("/api/user/get/socket/token");
+    try {
+      if(res && res.code == "200000"){
+        app.globalData.socketToken = res.data;
+        await app.initSocket();
+        setTimeout(() => {
+          app.sendWxSocket(
+            JSON.stringify({
+              "acceptWuserId":2,
+              "event":"VIEW_AGORA",
+              "meetingId":1,
+              "nickName":"昵称",
+              "remark":"切换为声网",
+              "timeStamp":"1608368361218"}
+            )
+          )
+        }, 2000);
+        
+      }
+    } catch (error) {
+      console.log(error)
     }
   },
 
@@ -543,6 +574,8 @@ Page({
       this.getMeetingRecords();
       // 获取正在进行中的会议信息
       this.getOngoingMeeting();
+
+      this.getScoketToken();  //获取socketToken
     }
   },
   onShareAppMessage() {

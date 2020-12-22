@@ -13,14 +13,17 @@ Page({
         appIdentifier:"",
         netLessRoomUuid:"",
         roomToken:"",
-        webViewBaseUrl:"http://192.168.1.5:8080"
+        meetingId:"",
+        webViewBaseUrl:"http://192.168.1.5:8080",
     },
     async onLoad(opt){
         console.log(opt)
         this.setData({
             netLessRoomUuid:opt.netLessRoomUuid,
+            meetingId:opt.meetingId
         });
         await this.initNetLess()
+        
     },
     async initNetLess(){
         let _res = await request.get('/api/config/netless/token/rooms/'+this.data.netLessRoomUuid);
@@ -30,7 +33,19 @@ Page({
                 appIdentifier:_res.data.netLessAppId,
                 url:`${this.data.webViewBaseUrl}?appIdentifier=${_res.data.netLessAppId}&roomToken=${_res.data.token}&netLessRoomUuid=${this.data.netLessRoomUuid}`
             })
+            this.switchStatus();
             console.log("白板url：",this.data.url)
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    async switchStatus(){
+        let _res = await request.post('/api/meeting/meeting/viewstatus',{
+            meetingId:this.data.meetingId,
+            status:"netless",  //切换白板netless，切换会议agora
+        });
+        try {
+            console.log(_res)
         } catch (error) {
             console.log(error)
         }

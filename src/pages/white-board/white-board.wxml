@@ -1,3 +1,6 @@
 <view>
- <web-view src="{{url}}" />
+<view wx:if="{{url}}">
+<web-view src="{{url}}" />
+</view>
+ 
 </view>
