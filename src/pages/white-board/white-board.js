@@ -33,6 +33,7 @@ Page({
         });
         await this.getSocketToken()
         await this.initNetLess()
+        
     },
     getSocketToken() {
         const that = this;
@@ -64,7 +65,19 @@ Page({
                 appIdentifier:_res.data.netLessAppId,
                 url:`${this.data.webViewBaseUrl}?appIdentifier=${_res.data.netLessAppId}&roomToken=${_res.data.token}&netLessRoomUuid=${this.data.netLessRoomUuid}&meetingId=${this.data.meetingId}&channelId=${this.data.channelId}&sessionId=${utils.getStorage('sessionId')}&confereeId=${this.data.confereeId}&token=${this.data.token}`
             })
+            this.switchStatus();
             console.log("白板url：",this.data.url)
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    async switchStatus(){
+        let _res = await request.post('/api/meeting/meeting/viewstatus',{
+            meetingId:this.data.meetingId,
+            status:"netless",  //切换白板netless，切换会议agora
+        });
+        try {
+            console.log(_res)
         } catch (error) {
             console.log(error)
         }

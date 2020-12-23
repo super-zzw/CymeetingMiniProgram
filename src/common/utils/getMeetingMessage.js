@@ -6,7 +6,8 @@ const config = require('@common/config');
 
 export {
   getAppID,
-  getMeetingDetail
+  getMeetingDetail,
+  getScoketToken
 };
 // 获取AppID和AppSecrect
 function getAppID() {
@@ -33,6 +34,14 @@ function getMeetingDetail(meetingId) {
     store.set('main.meetingUsers', conferees);
     store.set('main.channelId', channelId);
     initChat({ channelId: channelId, pageType: parseInt(isHost) === 1 ? 'create' : 'join' });
+    return res.data;
+  });
+}
+
+//获取websocket token
+function getScoketToken(){
+  return request.post('/api/user/get/socket/token').then(res => {
+    if (res.code != config.successCode) return;
     return res.data;
   });
 }

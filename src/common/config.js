@@ -6,5 +6,5 @@ const successCode = 200000;
 
 module.exports = {
   baseUrl,
-  successCode
+  successCode,
 };
