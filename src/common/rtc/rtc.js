@@ -94,7 +94,8 @@ class RTC extends AgoraRTC.Client {
   getChannelKey(channelId) {
     return new Promise((resolve, reject) => {
       wx.request({
-        url:'http://192.168.1.6:9111/api/config/agora/token/'+channelId,
+        // url:'http://192.168.1.6:9111/api/config/agora/token/'+channelId,
+        url:'https://meeting.gzcyou.com/api/config/agora/token/'+channelId,
         method: 'GET',
         success(res) {
           console.log(res)

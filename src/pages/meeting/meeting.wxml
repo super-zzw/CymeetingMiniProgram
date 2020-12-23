@@ -1,6 +1,7 @@
 <wxs src="../../common/wxs/tools.wxs" module="tools" />
 <import src="../../components/mytips/mytips" />
 <view class="g-container p-container {{isShowMeetingRoom ? 'p-container-scroll' : ''}}">
+  
   <navbar title="{{meetingDetail.roomNo}}" showIcon="{{true}}" isShowShare="{{!isShowMeetingRoom}}" isClose="{{true}}"
     isEditTitle="{{false}}" bindclosewin="handleClose">
   </navbar>
@@ -185,6 +186,9 @@
         {{meetingDetail.isHost ? '结束会议' : '退出会议'}}</view>
     </view>
   </view>
+
+
+
 
   <!-- 结束会议弹框 -->
   <modal show="{{isShowModal}}" cancelText="{{meetingDetail.isHost ? '确认结束' : '确定退出'}}"

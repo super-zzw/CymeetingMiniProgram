@@ -60,6 +60,8 @@ Page(Object.assign({}, MyTips, {
     index: '', // 当前编辑用户的索引
     isPageHide: false, // 当前页面是否被隐藏
     roomAddr: 'http://mt.polyv.net/login?m=', // 房间地址
+    viewStatus:'agora',
+    url:''
   },
 
   async onLoad(opt) {
@@ -76,7 +78,8 @@ Page(Object.assign({}, MyTips, {
       leaving: false,
       nickName: nickName,
       pageType: parseInt(isHost) === 1 ? 'create' : 'join',
-      isIphoneX: app.globalData.isIphoneX
+      isIphoneX: app.globalData.isIphoneX,
+     
     });
     await getMeetingDetail(meetingId);
     // if (utils.getStorage('sessionId')) await getAppID();
@@ -1065,16 +1068,19 @@ Page(Object.assign({}, MyTips, {
   },
 
   // 切换白板
-  bindTapToPPT() {
+  async bindTapToPPT() {
     this.destroyData();
     const { meetingId, isHost, uid, pageType, isCloseMic } = this.data;
     const { nickName, avatarUrl } = utils.getStorage('userInfo');
     const channelId = this.data.roomno;
     const topic = this.data.meetingDetail.topic;
+    const confereeId=this.data.meetingDetail.confereeId
     const netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
     if (parseInt(isHost) === 1) emitToPaintEvent({ roomId: channelId });
     if (!nickName || !avatarUrl || !channelId) return console.error(`加入会议数据不足,nickName:${nickName},avatarUrl:${avatarUrl},channelId:${channelId}`);
-    utils.navigateTo(`/pages/white-board/white-board?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}&netLessRoomUuid=${netLessRoomUuid}`);
+  
+    
+    utils.navigateTo(`/pages/white-board/white-board?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}&confereeId=${confereeId}&netLessRoomUuid=${netLessRoomUuid}`);
     // utils.reLaunch(`/pages/ppt/ppt?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
     this.setData({ changeViewModeStyle: '' });
   },
@@ -1090,6 +1096,7 @@ Page(Object.assign({}, MyTips, {
         }
         this.setData({
           meetingDetail: ret.data,
+          viewStatus:ret.data.viewStatus,
           joinMeetingPeopleList: _joinMeetingPeopleList
         });
       } else {
@@ -1401,5 +1408,7 @@ Page(Object.assign({}, MyTips, {
     if (from == 'button') {
       return utils.shareApp(title, url);
     }
-  }
+  },
+
+  
 }));
