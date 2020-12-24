@@ -38,7 +38,7 @@ App({
   //建立wxsocket
   initSocket(){
     if(!this.globalData.wxScoket){
-      let _wsurl = `ws://192.168.1.6:9111/socket/${this.globalData.socketToken}`;
+      let _wsurl = `wss://meeting.gzcyou.com/socket/${this.globalData.socketToken}`;
       // let _wsurl = `wss://meeting.gzcyou.com/socket/${this.globalData.socketToken}`;
       console.log("wxScoketUrl:",_wsurl)
       this.globalData.wxScoket = wx.connectSocket({

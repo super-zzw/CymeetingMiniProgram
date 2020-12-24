@@ -210,16 +210,16 @@ Page({
     app.globalData.socketToken = await getScoketToken();
     await app.initSocket();
     setTimeout(() => {
-      app.sendWxSocket(
-        JSON.stringify({
-          "acceptWuserId":2,
-          "event":"VIEW_AGORA",
-          "meetingId":1,
-          "nickName":"昵称",
-          "remark":"切换为声网",
-          "timeStamp":"1608368361218"}
-        )
-      )
+      // app.sendWxSocket(
+      //   JSON.stringify({
+      //     "acceptWuserId":2,
+      //     "event":"VIEW_AGORA",
+      //     "meetingId":1,
+      //     "nickName":"昵称",
+      //     "remark":"切换为声网",
+      //     "timeStamp":"1608368361218"}
+      //   )
+      // )
     }, 2000);
   },
 
