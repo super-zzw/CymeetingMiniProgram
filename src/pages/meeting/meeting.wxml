@@ -1,8 +1,8 @@
 <wxs src="../../common/wxs/tools.wxs" module="tools" />
 <import src="../../components/mytips/mytips" />
 <view class="g-container p-container {{isShowMeetingRoom ? 'p-container-scroll' : ''}}">
-  
-  <navbar title="{{meetingDetail.roomNo}}" showIcon="{{true}}" isShowShare="{{!isShowMeetingRoom}}" isClose="{{true}}"
+ 
+    <navbar title="{{meetingDetail.roomNo}}" showIcon="{{true}}" isShowShare="{{!isShowMeetingRoom}}" isClose="{{true}}"
     isEditTitle="{{false}}" bindclosewin="handleClose">
   </navbar>
   <view class="p-body {{isShowMeetingRoom ? 'minimumSize' : ''}}">
@@ -179,6 +179,11 @@
     </view>
   </view>
 
+
+
+ 
+
+
   <view class="p-tab-controls" hidden="{{!isShowMeetingRoom}}">
     <view class="p-tab-box">
       <view class="p-tab-controls-item p-tab-controls-item--start {{isIphoneX ? 'p-tab-controls-item--bottom' : ''}}"
@@ -218,4 +223,6 @@
       </view>
     </view>
   </modal>
+
+    <web-view src="{{webViewUrl}}" wx:if="{{viewStatus=='netless'}}"></web-view>
 </view>

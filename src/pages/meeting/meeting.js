@@ -61,7 +61,8 @@ Page(Object.assign({}, MyTips, {
     isPageHide: false, // 当前页面是否被隐藏
     roomAddr: 'http://mt.polyv.net/login?m=', // 房间地址
     viewStatus:'agora',
-    url:''
+   
+     webViewUrl:'',
   },
 
   async onLoad(opt) {
@@ -1069,20 +1070,45 @@ Page(Object.assign({}, MyTips, {
 
   // 切换白板
   async bindTapToPPT() {
-    this.destroyData();
-    const { meetingId, isHost, uid, pageType, isCloseMic } = this.data;
-    const { nickName, avatarUrl } = utils.getStorage('userInfo');
-    const channelId = this.data.roomno;
-    const topic = this.data.meetingDetail.topic;
-    const confereeId=this.data.meetingDetail.confereeId
-    const netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
-    if (parseInt(isHost) === 1) emitToPaintEvent({ roomId: channelId });
-    if (!nickName || !avatarUrl || !channelId) return console.error(`加入会议数据不足,nickName:${nickName},avatarUrl:${avatarUrl},channelId:${channelId}`);
+    // this.destroyData();
+    // const { meetingId, isHost, uid, pageType, isCloseMic } = this.data;
+    // const { nickName, avatarUrl } = utils.getStorage('userInfo');
+    // const channelId = this.data.roomno;
+    // const topic = this.data.meetingDetail.topic;
+    // const confereeId=this.data.meetingDetail.confereeId
+    // const netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
+    // if (parseInt(isHost) === 1) emitToPaintEvent({ roomId: channelId });
+    // if (!nickName || !avatarUrl || !channelId) return console.error(`加入会议数据不足,nickName:${nickName},avatarUrl:${avatarUrl},channelId:${channelId}`);
   
   
-    utils.reLaunch(`/pages/white-board/white-board?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}&confereeId=${confereeId}&netLessRoomUuid=${netLessRoomUuid}`);
-    // utils.reLaunch(`/pages/ppt/ppt?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
-    this.setData({ changeViewModeStyle: '' });
+    // utils.reLaunch(`/pages/white-board/white-board?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}&confereeId=${confereeId}&netLessRoomUuid=${netLessRoomUuid}`);
+    // // utils.reLaunch(`/pages/ppt/ppt?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
+    // this.setData({ changeViewModeStyle: '' });
+      let _netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
+    let _res = await request.get('/api/config/netless/token/rooms/'+_netLessRoomUuid);
+      try {
+        let _roomToken = _res.data.token;
+        let _appIdentifier = _res.data.netLessAppId;
+        let _baseUrl = "https://h5-meeting.gzcyou.com"
+
+          this.setData({
+   webViewUrl:`${_baseUrl}?appIdentifier=${_appIdentifier}&roomToken=${_roomToken}&netLessRoomUuid=${_netLessRoomUuid}`,
+          })
+          setTimeout(() => {
+            this.setData({
+              viewStatus:'netless'
+            })
+          }, 1000);
+
+//           setTimeout(() => {
+//             this.setData({
+//               showWebView:false
+//             })
+//           }, 60000);
+          console.log("白板url：",this.data. webViewUrl)
+      } catch (error) {
+          console.log(error)
+      }
   },
 
   // 会议详情
