@@ -147,13 +147,13 @@ Page({
             utils.hideLoading();
             try {
               if (ret.code == config.successCode) {
-                try {
-                  if (utils.getStorage('sessionId')){
-                    await getAppID();
-                    await that.initToken();  //登录成果获取socketToken
-                  }
+                // try {
+                //   if (utils.getStorage('sessionId')){
+                //     await getAppID();
+                //     await that.initToken();  //登录成果获取socketToken
+                //   }
                   
-                } catch (error) { }
+                // } catch (error) { }
                 that.setData({
                   isBindMobile: ret.data.isBindMobile,
                   sessionId: ret.data.sessionId
@@ -161,7 +161,7 @@ Page({
                 utils.setStorage('userInfo', userInfo);
                 utils.setStorage('sessionId', ret.data.sessionId);
                 utils.setStorage('isBindMobile', ret.data.isBindMobile);
-
+                await app.initSocket();  //登录成功连接socket
                 if ((type != 'join-meeting') && !that.data.isBindMobile) {
                   that.setData({ isShowModal2: true });
                 } else {
@@ -206,22 +206,22 @@ Page({
     }
   },
   // 建立wxSocket
-  async initToken(){
-    app.globalData.socketToken = await getScoketToken();
-    await app.initSocket();
-    setTimeout(() => {
-      // app.sendWxSocket(
-      //   JSON.stringify({
-      //     "acceptWuserId":2,
-      //     "event":"VIEW_AGORA",
-      //     "meetingId":1,
-      //     "nickName":"昵称",
-      //     "remark":"切换为声网",
-      //     "timeStamp":"1608368361218"}
-      //   )
-      // )
-    }, 2000);
-  },
+  // async initToken(){
+  //   app.globalData.socketToken = await getScoketToken();
+  //   await app.initSocket();
+  //   setTimeout(() => {
+  //     // app.sendWxSocket(
+  //     //   JSON.stringify({
+  //     //     "acceptWuserId":2,
+  //     //     "event":"VIEW_AGORA",
+  //     //     "meetingId":1,
+  //     //     "nickName":"昵称",
+  //     //     "remark":"切换为声网",
+  //     //     "timeStamp":"1608368361218"}
+  //     //   )
+  //     // )
+  //   }, 2000);
+  // },
 
   // 获取手机号回调
   handleGetPhoneNumber(e) {
@@ -480,10 +480,10 @@ Page({
           }
           store.set('main.confereeId', ret.data.confereeId);
           store.set('main.channelId', ret.data.channelId);
-          initChat({
-            channelId: ret.data.channelId,
-            pageType: 'create'
-          });
+          // initChat({
+          //   channelId: ret.data.channelId,
+          //   pageType: 'create'
+          // });
         }
       }
     } catch (error) {
@@ -542,7 +542,9 @@ Page({
       utils.navigateTo('/pages/subscribe-meeting/subscribe-meeting');
     }
   },
-
+  async onLoad(){
+   
+  },
   async onShow() {
     const date = new Date();
     const year = date.getFullYear();
@@ -559,17 +561,18 @@ Page({
       endDate: year + '-' + month + '-' + day,
       // isFiltered: false
     });
-
+    
     this.initStatus();
     if (utils.getStorage('sessionId')) {
       this.getMySubscribe();
       this.getMeetingRecords();
       // 获取正在进行中的会议信息
       this.getOngoingMeeting();
-
-      this.initToken();  //获取socketToken
+        // this.initToken();  //获取socketToken
+     
     }
   },
+  
   onShareAppMessage() {
     return utils.shareApp();
   }

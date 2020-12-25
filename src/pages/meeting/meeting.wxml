@@ -1,7 +1,7 @@
 <wxs src="../../common/wxs/tools.wxs" module="tools" />
 <import src="../../components/mytips/mytips" />
 <view class="g-container p-container {{isShowMeetingRoom ? 'p-container-scroll' : ''}}">
- 
+   <!-- <block wx:if="{{viewStatus=='agora'}}"> -->
     <navbar title="{{meetingDetail.roomNo}}" showIcon="{{true}}" isShowShare="{{!isShowMeetingRoom}}" isClose="{{true}}"
     isEditTitle="{{false}}" bindclosewin="handleClose">
   </navbar>
@@ -14,7 +14,7 @@
         bindpushfailed="onPusherFailed" bindtap="bindChangeWin" data-uid="{{item.uid}}" data-index="{{index}}"
         bindlivePusherStatusChange="onPusherStatusChanged">
         <!-- 底部操作栏 start -->
-        <cover-view wx:if="{{!isShowMeetingRoom && media.length == 1}}" class="p-bottom-tab"
+        <cover-view wx:if="{{!isShowMeetingRoom && media.length == 1&&viewStatus=='agora'}}" class="p-bottom-tab"
           style="bottom: 70rpx;z-index: 99999999999;">
           <!-- <cover-image class="i-tab" src="/images/meeting/btn-board@2x.png"></cover-image> -->
           <cover-view class="i-tab ppt-h5-draw-nav-btns__btn" bindtap="bindTapToPPT" wx:if="{{isHost == 1}}">
@@ -47,7 +47,7 @@
         height="{{isShowMeetingRoom ? 1 : item.height}}" url="{{item.url}}"
         bindlivePlayerStatusChange="onPlayerStatusChanged">
         <!-- 底部操作栏 start -->
-        <cover-view wx:if="{{!isShowMeetingRoom}}" class="p-bottom-tab" style="bottom: 70rpx;z-index: 99999999999;">
+        <cover-view wx:if="{{!isShowMeetingRoom&&viewStatus=='agora'}}" class="p-bottom-tab" style="bottom: 70rpx;z-index: 99999999999;">
           <!-- <cover-image class="i-tab" src="/images/meeting/btn-board@2x.png"></cover-image> -->
           <cover-view class="i-tab ppt-h5-draw-nav-btns__btn" bindtap="bindTapToPPT" wx:if="{{isHost == 1}}">
             <cover-view class="ppt-h5-draw-nav-btns__btn-board">
@@ -223,6 +223,6 @@
       </view>
     </view>
   </modal>
-
-    <web-view src="{{webViewUrl}}" wx:if="{{viewStatus=='netless'}}"></web-view>
+<!-- </block> -->
+    <web-view src="{{webViewUrl}}" wx:if="{{viewStatus=='netless'}}" ></web-view>
 </view>

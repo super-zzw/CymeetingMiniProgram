@@ -18,6 +18,7 @@
     "navigationBarTextStyle": "black",
     "onReachBottomDistance": 0,
     "enablePullDownRefresh": false
+    
   },
   "sitemapLocation": "sitemap.json"
 }

@@ -47,26 +47,7 @@ Page({
     })
 
   },
-  getSocketToken() {
-    const that = this;
-    request.post('/api/user/get/socket/token', {})
-      .then(function (response) {
-
-        console.log(response.data)
-        if (response) {
-
-          that.setData({
-            token: response.data
-          })
-
-        } else {
-
-        }
-      })
-      .catch(function (err) {
-        console.error('请求获取Token接口错误', err);
-      });
-  },
+ 
 
   async initNetLess() {
     let _res = await request.get('/api/config/netless/token/rooms/' + this.data.netLessRoomUuid);

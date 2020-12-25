@@ -1,5 +1,6 @@
 {
   "disableSwipeBack": true,
+  "navigationStyle": "custom",
   "usingComponents": {
     "navbar": "/components/navbar/navbar",
     "modal": "/components/modal/modal",

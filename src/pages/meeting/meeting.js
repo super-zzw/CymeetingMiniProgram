@@ -164,84 +164,124 @@ Page(Object.assign({}, MyTips, {
         }
       }
     });
-    // 初始化聊天室
-    initChat({
-      channelId: this.data.roomno,
-      pageType: this.data.pageType,
-      toGetInitData: parseInt(this.data.isHost) !== 1,
-      callback: ({ EVENT, isCamClosed, data: { uid, isMute, isCam, values } = {} }) => {
-        switch (EVENT) {
-          case 'controlCam':
-            if (parseInt(isCamClosed) === 1) that.bindTapToPPT();
-            break;
-          case 'onChangeCamera':
-            console.log('onChangeCamera切换摄像头==', uid, isCam);
-            const _media1 = that.data.media;
-            if (uid != that.data.uid) {
-              for (let i = 0; i < _media1.length; i++) {
-                const item = _media1[i];
-                if (item.uid == uid) {
-                  _media1[i].iscam = isCam;
-                  that.setData({ media: _media1 });
-                }
-              }
-            }
-            break;
-          case 'muteForMeeting':
-            that.muteForMeeting({ uid, isMute });
-            break;
-          case 'muteForMeeting1':
-            const _media = that.data.media;
-            if (uid != that.data.uid) {
-              for (let i = 0; i < _media.length; i++) {
-                const item = _media[i];
-                if (item.uid == uid) {
-                  _media[i].ismute = isMute;
-                  that.setData({ media: _media });
-                }
-              }
-            }
-            break;
-          case 'delForMeeting':
-            that.delForMeeting(uid);
-            break;
-          case 'endingForMeeting':
-            // 主持人结束会议
-            console.log('接收到主持人结束会议socket');
-            utils.showToast({ title: '主持人结束会议', icon: 'none' });
-            // 退出频道
-            that.data.client.leave();
-            that.data.client && that.data.client.destroy();
-            // 断开socket
-            disconnectSocket();
-            setTimeout(() => {
-              utils.reLaunch('/pages/index/index');
-            }, 1000);
-            break;
-          case 'hostEndingMeeting':
-            // 接收服务端推送的主持人异常退出超过7分钟的消息
-            console.log('接收服务端推送的主持人异常退出超过7分钟的socket消息');
-            let time = 60;
-            const interval = setInterval(() => {
-              time -= 1;
-              if (time == 0) {
-                clearInterval(interval);
-                // 退出频道
-                that.data.client.leave();
-                that.data.client && that.data.client.destroy();
-                // 断开socket
-                disconnectSocket();
-                setTimeout(() => {
-                  utils.redirectTo('/pages/index/index');
-                }, 1000);
-              } else {
-                that.showTips(`主持人已离线7分钟，会议将在 ${time}s 后关闭`, 'error');
-              }
-            }, 1000);
-            break;
+    if(app.globalData.wxScoket){
+      app.globalData.wxScoket.onMessage(async data => {
+        //返回判断是否是本人
+        console.log("收到ws数据:",data);
+        var data=JSON.parse(data.data)
+        if(data.event=='VIEW_AGORA'){
+           this.setData({
+            viewStatus:'agora'
+                        })
+            wx.setNavigationBarTitle({ title: "辰悠云会议"})
+            this.changeStatus();
         }
-      }
+        if(data.event=='VIEW_NETLESS'){
+            let _netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
+      let _res = await request.get('/api/config/netless/token/rooms/'+_netLessRoomUuid);
+          let _roomToken = _res.data.token;
+          let _appIdentifier = _res.data.netLessAppId;
+          let _baseUrl = "https://h5-meeting.gzcyou.com"
+          this.setData({
+             webViewUrl:`${_baseUrl}?appIdentifier=${_appIdentifier}&roomToken=${_roomToken}&netLessRoomUuid=${_netLessRoomUuid}&sessionId=${utils.getStorage('sessionId')}&meetingId=${this.data.meetingId}&channelId=${this.data.channelId}`,
+            viewStatus:'netless'
+                    })
+           
+        }
+        if(data.event=='END_MEETING'){
+            this.data.client && this.data.client.destroy();
+    this.setData({
+      client : null,
+      media:[]
     });
+          const ret = await request.post('/api/meeting/leaveMeeting', { meetingId: this.data.meetingId });
+          this.setData({
+            leaveMeetingDetail: ret.data,
+            isShowModal2: true
+          });
+        }
+      })
+    }
+    
+   
+    // 初始化聊天室
+    // initChat({
+    //   channelId: this.data.roomno,
+    //   pageType: this.data.pageType,
+    //   toGetInitData: parseInt(this.data.isHost) !== 1,
+    //   callback: ({ EVENT, isCamClosed, data: { uid, isMute, isCam, values } = {} }) => {
+    //     switch (EVENT) {
+    //       case 'controlCam':
+    //         if (parseInt(isCamClosed) === 1) that.bindTapToPPT();
+    //         break;
+    //       case 'onChangeCamera':
+    //         console.log('onChangeCamera切换摄像头==', uid, isCam);
+    //         const _media1 = that.data.media;
+    //         if (uid != that.data.uid) {
+    //           for (let i = 0; i < _media1.length; i++) {
+    //             const item = _media1[i];
+    //             if (item.uid == uid) {
+    //               _media1[i].iscam = isCam;
+    //               that.setData({ media: _media1 });
+    //             }
+    //           }
+    //         }
+    //         break;
+    //       case 'muteForMeeting':
+    //         that.muteForMeeting({ uid, isMute });
+    //         break;
+    //       case 'muteForMeeting1':
+    //         const _media = that.data.media;
+    //         if (uid != that.data.uid) {
+    //           for (let i = 0; i < _media.length; i++) {
+    //             const item = _media[i];
+    //             if (item.uid == uid) {
+    //               _media[i].ismute = isMute;
+    //               that.setData({ media: _media });
+    //             }
+    //           }
+    //         }
+    //         break;
+    //       case 'delForMeeting':
+    //         that.delForMeeting(uid);
+    //         break;
+    //       case 'endingForMeeting':
+    //         // 主持人结束会议
+    //         console.log('接收到主持人结束会议socket');
+    //         utils.showToast({ title: '主持人结束会议', icon: 'none' });
+    //         // 退出频道
+    //         that.data.client.leave();
+    //         that.data.client && that.data.client.destroy();
+    //         // 断开socket
+    //         disconnectSocket();
+    //         setTimeout(() => {
+    //           utils.reLaunch('/pages/index/index');
+    //         }, 1000);
+    //         break;
+    //       case 'hostEndingMeeting':
+    //         // 接收服务端推送的主持人异常退出超过7分钟的消息
+    //         console.log('接收服务端推送的主持人异常退出超过7分钟的socket消息');
+    //         let time = 60;
+    //         const interval = setInterval(() => {
+    //           time -= 1;
+    //           if (time == 0) {
+    //             clearInterval(interval);
+    //             // 退出频道
+    //             that.data.client.leave();
+    //             that.data.client && that.data.client.destroy();
+    //             // 断开socket
+    //             disconnectSocket();
+    //             setTimeout(() => {
+    //               utils.redirectTo('/pages/index/index');
+    //             }, 1000);
+    //           } else {
+    //             that.showTips(`主持人已离线7分钟，会议将在 ${time}s 后关闭`, 'error');
+    //           }
+    //         }, 1000);
+    //         break;
+    //     }
+    //   }
+    // });
 
     // 检测是否拒绝授权
     wx.authorize({
@@ -439,7 +479,7 @@ Page(Object.assign({}, MyTips, {
         this.data.client.leave();
         this.data.client.destroy();
         // 断开socket
-        disconnectSocket();
+        // disconnectSocket();
       } catch (error) { }
       setTimeout(() => {
         utils.reLaunch('/pages/index/index');
@@ -451,7 +491,7 @@ Page(Object.assign({}, MyTips, {
   initLayouter() {
     const systemInfo = app.globalData.systemInfo;
     const sliceHeight = app.globalData.isIphoneX ? 84 : 64;
-    this.layouter = new Layouter(systemInfo.windowWidth, systemInfo.windowHeight - sliceHeight);
+    this.layouter = new Layouter(systemInfo.windowWidth, systemInfo.windowHeight );
   },
 
   // 处理麦和摄像头开启关闭
@@ -833,7 +873,7 @@ Page(Object.assign({}, MyTips, {
       this.data.client && this.data.client.leave();
       this.data.client && this.data.client.destroy();
       this.data.client = null;
-      disconnectSocket();
+      // disconnectSocket();
     } catch (err) {
       console.error(err);
     }
@@ -1070,47 +1110,45 @@ Page(Object.assign({}, MyTips, {
 
   // 切换白板
   async bindTapToPPT() {
-    // this.destroyData();
-    // const { meetingId, isHost, uid, pageType, isCloseMic } = this.data;
-    // const { nickName, avatarUrl } = utils.getStorage('userInfo');
-    // const channelId = this.data.roomno;
-    // const topic = this.data.meetingDetail.topic;
-    // const confereeId=this.data.meetingDetail.confereeId
-    // const netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
-    // if (parseInt(isHost) === 1) emitToPaintEvent({ roomId: channelId });
-    // if (!nickName || !avatarUrl || !channelId) return console.error(`加入会议数据不足,nickName:${nickName},avatarUrl:${avatarUrl},channelId:${channelId}`);
-  
-  
-    // utils.reLaunch(`/pages/white-board/white-board?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}&confereeId=${confereeId}&netLessRoomUuid=${netLessRoomUuid}`);
-    // // utils.reLaunch(`/pages/ppt/ppt?channelId=${channelId}&roomNo=${this.data.meetingDetail.roomNo}&topic=${topic}&userName=${nickName}&avatarUrl=${avatarUrl}&pageType=${pageType}&meetingId=${meetingId}&isHost=${isHost}&uid=${uid}&isCloseMic=${isCloseMic}`);
-    // this.setData({ changeViewModeStyle: '' });
       let _netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
     let _res = await request.get('/api/config/netless/token/rooms/'+_netLessRoomUuid);
       try {
         let _roomToken = _res.data.token;
         let _appIdentifier = _res.data.netLessAppId;
         let _baseUrl = "https://h5-meeting.gzcyou.com"
-
+        const channelId = this.data.roomno;
           this.setData({
-   webViewUrl:`${_baseUrl}?appIdentifier=${_appIdentifier}&roomToken=${_roomToken}&netLessRoomUuid=${_netLessRoomUuid}`,
+   webViewUrl:`${_baseUrl}?appIdentifier=${_appIdentifier}&roomToken=${_roomToken}&netLessRoomUuid=${_netLessRoomUuid}&sessionId=${utils.getStorage('sessionId')}&meetingId=${this.data.meetingId}&channelId=${channelId}`,
           })
+          this.changeStatus()
           setTimeout(() => {
             this.setData({
               viewStatus:'netless'
             })
-          }, 1000);
 
-//           setTimeout(() => {
-//             this.setData({
-//               showWebView:false
-//             })
-//           }, 60000);
+let data = JSON.stringify({
+
+  "event": "VIEW_NETLESS",
+  "meetingId": this.data.meetingId,
+
+
+  "timeStamp": new Date().getTime()
+})
+app.sendWxSocket(data, () => {
+  // console.log('发送成功')
+})
+          }, 1000);
+      
+     
           console.log("白板url：",this.data. webViewUrl)
       } catch (error) {
           console.log(error)
       }
   },
-
+  // 修改会议状态
+  changeStatus(){
+    request.post('/api/meeting/meeting/viewstatus', { meetingId: this.data.meetingId, status: 'netless' });
+  },
   // 会议详情
   async getMeetingDetail() {
     const ret = await request.post('/api/meeting/getMeetingDetail', { meetingId: this.data.meetingId, sessionId: utils.getStorage('sessionId') });
@@ -1125,6 +1163,9 @@ Page(Object.assign({}, MyTips, {
           viewStatus:ret.data.viewStatus,
           joinMeetingPeopleList: _joinMeetingPeopleList
         });
+        if(ret.data.viewStatus=='netless'){
+          this.bindTapToPPT()
+        }
       } else {
         utils.showToast({ title: ret.message, icon: 'none' });
       }
@@ -1261,21 +1302,21 @@ Page(Object.assign({}, MyTips, {
   // 主持人静言用户
   async handleVoice(e) {
     const { currentTarget: { dataset: { uid, ismute: nowIsMute, index } } } = e;
-    const chat = store.get('main.chat');
-    if (!chat) return;
+   
+   
     const isMute = !nowIsMute;
     const ret = await request.post('/api/meeting/updateMicMute', { confereeId: uid, micMute: isMute ? 1 : 0 });
     try {
       if (ret.code == config.successCode) {
-        const sendData = {
-          EVENT: 'muteForMeeting',
-          version: '1.0',
-          data: { uid, meetingId: this.data.meetingId, isMute },
-          tip: '会议发起者将指定参与者静音',
-          emitMode: 0
-        };
-        chat.sendSocketMessage(sendData, 'customMessage');
-        console.log('主持人发送静音socket，发送数据为=', sendData);
+        // const sendData = {
+        //   EVENT: 'muteForMeeting',
+        //   version: '1.0',
+        //   data: { uid, meetingId: this.data.meetingId, isMute },
+        //   tip: '会议发起者将指定参与者静音',
+        //   emitMode: 0
+        // };
+        // chat.sendSocketMessage(sendData, 'customMessage');
+        // console.log('主持人发送静音socket，发送数据为=', sendData);
         this.getMeetingDetail();
       } else {
         utils.showToast({ title: ret.message, icon: 'none' });
@@ -1329,46 +1370,55 @@ Page(Object.assign({}, MyTips, {
 
   // 结束会议确认回调
   async bindConfirm() {
-    const ret = await request.post('/api/meeting/leaveMeeting', { meetingId: this.data.meetingId });
-    this.updateMicStatus(this.data.uid, 0);
-    this.updateCam(this.data.uid, 1);
-    app.globalData.isChangedPage = false;
-    this.data.client && this.data.client.destroy();
-    this.data.client = null;
-    console.log('结束会议确认回调==', app.globalData.isChangedPage);
-    try {
-      if (ret.code == config.successCode) {
-        if (this.data.meetingDetail.isHost == 1) {
-          const chat = store.get('main.chat');
-          if (!chat) return;
-          const sendData = {
-            EVENT: 'endingForMeeting',
-            version: '1.0',
-            data: {},
-            tip: '会议发起者结束会议',
-            emitMode: 0
-          };
-          chat.sendSocketMessage(sendData, 'customMessage');
-          console.log('会议发起者结束会议socket');
+  
+    let data = JSON.stringify({
+      "event": "END_MEETING",
+      "meetingId": this.data.meetingId,
+      "timeStamp": new Date().getTime()
+    })
+    app.sendWxSocket(data)
+    // const ret = await request.post('/api/meeting/leaveMeeting', { meetingId: this.data.meetingId });
+    // this.updateMicStatus(this.data.uid, 0);
+    // this.updateCam(this.data.uid, 1);
+    // app.globalData.isChangedPage = false;
+    // this.data.client && this.data.client.destroy();
+    // this.data.client = null;
+    // console.log('结束会议确认回调==', app.globalData.isChangedPage);
+    // try {
+    //   if (ret.code == config.successCode) {
+    //     if (this.data.meetingDetail.isHost == 1) {
+    //       const chat = store.get('main.chat');
+    //       if (!chat) return;
+       
+    //       // 会议发起者结束会议socket
+    //       let data = JSON.stringify({
 
-          this.setData({
-            leaveMeetingDetail: ret.data,
-            isShowModal: false,
-            isShowModal2: true
-          });
-        } else {
-          utils.reLaunch('/pages/index/index');
-        }
-      } else {
-        utils.showToast({ title: ret.message, icon: 'none' });
-      }
-    } catch (error) {
+    //         "event": "END_MEETING",
+    //         "meetingId": this.data.meetingId,
+          
+          
+    //         "timeStamp": new Date().getTime()
+    //       })
+    //       app.sendWxSocket(data)
 
-    }
+    //       this.setData({
+    //         leaveMeetingDetail: ret.data,
+    //         isShowModal: false,
+    //         isShowModal2: true
+    //       });
+    //     } else {
+    //       utils.reLaunch('/pages/index/index');
+    //     }
+    //   } else {
+    //     utils.showToast({ title: ret.message, icon: 'none' });
+    //   }
+    // } catch (error) {
+
+    // }
 
     // 结束画板
-    if (parseInt(this.data.meetingDetail.isHost) === 1) api.closeMeetingPPT(this.data.meetingDetail.roomNo);
-    disconnectSocket();
+    // if (parseInt(this.data.meetingDetail.isHost) === 1) api.closeMeetingPPT(this.data.meetingDetail.roomNo);
+    // disconnectSocket();
   },
   bindConfirm2() {
     this.setData({
@@ -1435,6 +1485,7 @@ Page(Object.assign({}, MyTips, {
       return utils.shareApp(title, url);
     }
   },
+  
 
   
 }));
