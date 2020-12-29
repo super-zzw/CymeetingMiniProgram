@@ -97,7 +97,7 @@
               bindinput="handleTopicInputing" bindblur="handleTopicInput" wx:else />
 
             <image class="i-edit" src="/images/subscribe-meeting/btn-edit@2x.png" bindtap="editTheme"
-              data-text="{{meetingDetail.topic}}" wx:if="{{meetingDetail.isHost}}"></image>
+              data-text="{{meetingDetail.topic}}" wx:if="{{meetingDetail.isHost&&!isEditTheme}}"></image>
 
             <image class="i-lock"
               src="{{meetingDetail.locking ? '/images/subscribe-meeting/btn-locked@2x.png' : '/images/subscribe-meeting/btn-no-lock@2x.png'}}"
@@ -105,13 +105,17 @@
 
           </view>
         </view>
+            <view class="p-item">
+          <view class="p-item-label">主持人</view>
+          <view class="p-item-text g-hidden-text">{{meetingDetail.nickName}}</view>
+        </view>
         <view class="p-item">
           <view class="p-item-label">房间号</view>
           <view class="p-item-text p-item-room" bindtap="copyText" data-text="{{meetingDetail.roomNo}}"
             data-psw="{{meetingDetail.passWord}}">
             <view class="p-item-room-box">
-              <image class="i-no" src="/images/subscribe-meeting/no@2x.png"></image>
-              <text>{{tools.formatRoomNo(meetingDetail.roomNo)}}<text
+              
+              <text>{{'NO.'+tools.formatRoomNo(meetingDetail.roomNo)}}<text
                   wx:if="{{meetingDetail.passWord}}">(密码:{{meetingDetail.passWord}})</text></text>
             </view>
             <image class="i-copy" src="/images/subscribe-meeting/btn-copy@2x.png"></image>
@@ -124,10 +128,7 @@
             <image class="i-copy" src="/images/subscribe-meeting/btn-copy@2x.png"></image>
           </view>
         </view>
-        <view class="p-item">
-          <view class="p-item-label">主持人</view>
-          <view class="p-item-text g-hidden-text">{{meetingDetail.nickName}}</view>
-        </view>
+    
         <view class="p-item">
           <view class="p-item-label">参会人数</view>
           <view class="p-item-text">{{meetingDetail.counts}}人</view>
@@ -136,22 +137,42 @@
           <view class="p-item-label">开始时间</view>
           <view class="p-item-text">{{meetingDetail.beginDate}}</view>
         </view>
+       
       </view>
     </view>
-    <view class="p-line"></view>
+  
     <view class="p-meeting-people p-meeting-detail">
       <view class="p-title">
-        <text>邀请参会成员</text>
-        <button type="button" open-type="share" class="p-share-btn">
-          <image class="i-right" src="/images/subscribe-meeting/btn-more@2x.png"></image>
+        <text class="left">参会成员</text>
+         <button open-type="share" class="right">
+          <image class="c-icon-back" src="/images/subscribe-meeting/invite.png"></image>
+          <text>邀请其他成员</text>
         </button>
+        <!-- <view class="right">
+         <image src="/images/subscribe-meeting/invite.png"></image>
+        <text>邀请其他成员</text>
+        </view> -->
+        
       </view>
-      <view class="touch-item {{(item.isTouchMove && index != 0) && meetingDetail.isHost ? 'touch-move-active' : ''}}"
-        data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{joinMeetingPeopleList}}"
+      <view 
+        data-index="{{index}}"  wx:for="{{joinMeetingPeopleList}}"
         wx:key="index">
         <view class="p-content p-item-box" style="width: 100%;">
-          <view class="p-item" style="width: 670rpx;">
-            <image class="p-item-avatar" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+          <view class="p-item p-item1" >
+            <view class="p-left">
+                <image class="p-item-avatar" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+                <text class="p-item-name" wx-if="{{!item.isEditName}}">{{item.nickName}}</text>
+
+            <input class="p-theme-input g-hidden-text" auto-focus="true" maxlength="20" value="{{item.nickName}}"
+              bindinput="handleNickInputing" bindblur="handleNickInput"  wx-if="{{item.isEditName}}" data-index="{{index}}"/>
+            </view>
+            <view class="p-right" >
+               <image class="p-item-edit" src="/images/subscribe-meeting/btn-edit@2x.png" bindtap="editName" wx:if="{{item.isUpdate}}" data-index="{{index}}"></image>
+               <view class="noSel" bindtap="selectMember" wx:if="{{host&&selectIndex!=index&&!item.isHost}}" data-index="{{index}}" data-info="{{item}}"></view>
+               <image  class="p-item-select" bindtap="selectMember" data-index="{{index}}" src="/images/subscribe-meeting/icon-success@2x.png"  wx:if="{{host&&selectIndex==index&&!item.isHost}}"></image>
+            </view>
+            
+            <!-- <image class="p-item-avatar" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
             <view class="p-item-empty-avatar g-hidden-text" wx:else>{{item.nickName}}</view>
             <view class="p-item-text g-hidden-text g-border">
               <image class="i-mic" src="/images/index/ic-mic@2x.png" wx:if="{{item.isHost}}"></image>
@@ -168,13 +189,13 @@
                 data-id="{{item.confereeId}}" data-index="{{index}}" wx:if="{{item.isUpdate}}"
                 style="position: absolute;right: 0;">
               </image>
-            </view>
+            </view> -->
           </view>
         </view>
-        <view class="p-del p-jinyin {{item.micMute ? ' p-cancel-jinyin' : ''}}" catchtap="handleVoice"
+        <!-- <view class="p-del p-jinyin {{item.micMute ? ' p-cancel-jinyin' : ''}}" catchtap="handleVoice"
           data-index="{{index}}" data-uid="{{item.confereeId}}" data-ismute="{{item.micMute}}">
           {{item.micMute ? '取消静音' : '静音'}}</view>
-        <view class="p-del" catchtap="handleDel" data-index="{{index}}" data-uid="{{item.confereeId}}">移出</view>
+        <view class="p-del" catchtap="handleDel" data-index="{{index}}" data-uid="{{item.confereeId}}">移出</view> -->
       </view>
     </view>
   </view>
@@ -185,11 +206,18 @@
 
 
   <view class="p-tab-controls" hidden="{{!isShowMeetingRoom}}">
-    <view class="p-tab-box">
-      <view class="p-tab-controls-item p-tab-controls-item--start {{isIphoneX ? 'p-tab-controls-item--bottom' : ''}}"
-        bindtap="endingMeeting">
+    <view class="p-tabs">
+       <!-- <view wx:if="{{selectIndex}}"> -->
+        <view class="p-tab-controls-item p-tab-controls-item1 p-tab-controls-item--cancel" wx:if="{{selectIndex}}" catchtap="handleDel"> 
+        移出</view>
+         <view class="p-tab-controls-item  p-tab-controls-item--start" wx:if="{{selectIndex}}" catchtap="handleVoice"> 
+        {{joinMeetingPeopleList[selectIndex].micMute ? '取消静音' : '静音'}}</view>
+      <!-- </view> -->
+      <view class="p-tab-controls-item  p-tab-controls-item--start" bindtap="endingMeeting" wx:else> 
         {{meetingDetail.isHost ? '结束会议' : '退出会议'}}</view>
+     
     </view>
+    
   </view>
 
 

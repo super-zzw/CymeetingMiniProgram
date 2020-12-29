@@ -6,9 +6,9 @@
         <view class="p-item g-border-670">
           <view class="p-item-label">会议主题：</view>
           <view class="p-item-text g-hidden-text">{{meetingDetail.topic}}</view>
-          <image src="/images/subscribe-meeting/btn-edit@2x.png" class="p-edit"/>
+          <!-- <image src="/images/subscribe-meeting/btn-edit@2x.png" class="p-edit"/>
           <image src="/images/subscribe-meeting/btn-no-lock@2x.png" class="p-lock" bindtap="nolocks"/>
-          <image src="/images/subscribe-meeting/btn-locked@2x.png" class="p-lock" bindtap="locks"/>
+          <image src="/images/subscribe-meeting/btn-locked@2x.png" class="p-lock" bindtap="locks"/> -->
         </view>
         <view class="p-item g-border-670">
           <view class="p-item-label">主持人：</view>
@@ -16,25 +16,25 @@
         </view>
         <view class="p-item g-border-670">
           <view class="p-item-label">房间号：</view>
-          <view class="p-item-text p-item-room" bindtap="copyText" data-text="{{meetingDetail.roomNo}}"
-            data-psw="{{meetingDetail.passWord}}">
+          <view class="p-item-text p-item-room" bindtap="copyText" data-text="{{meetingDetail.roomNo}}" data-psw="{{meetingDetail.passWord}}">
             <view class="p-item-room-box">
               <image class="i-no" src="/images/subscribe-meeting/no@2x.png"></image>
-              <text>{{tools.formatRoomNo(meetingDetail.roomNo)}}<text
-                  wx:if="{{sourceType == 'records' && meetingDetail.passWord}}">(密码：{{meetingDetail.passWord}})</text></text>
+              <text>
+                <text>{{meetingDetail.roomNo}}</text>
+                <text wx:if="{{sourceType == 'records' && meetingDetail.passWord}}">
+                  (密码：{{meetingDetail.passWord}})
+                </text>
+              </text>
             </view>
-            <image class="i-copy" src="/images/subscribe-meeting/btn-copy@2x.png" wx:if="{{sourceType != 'records'}}">
-            </image>
+            <image class="i-copy" src="/images/subscribe-meeting/btn-copy@2x.png" wx:if="{{sourceType != 'records'}}"></image>
           </view>
-
         </view>
         <!-- 第一期隐藏 -->
         <view class="p-item g-hidden-text g-border-670">
           <view class="p-item-label">房间地址：</view>
           <view class="p-item-text p-item-home g-hidden-text" bindtap="copyText" data-text="{{meetingDetail.roomAddr}}">
             <text class="g-hidden-text">{{meetingDetail.roomAddr}}</text>
-            <image class="i-copy" src="/images/subscribe-meeting/btn-copy@2x.png" wx:if="{{sourceType != 'records'}}">
-            </image>
+            <image class="i-copy" src="/images/subscribe-meeting/btn-copy@2x.png" wx:if="{{sourceType != 'records'}}"></image>
           </view>
         </view>
         <view class="p-item g-border-670">
@@ -45,14 +45,13 @@
           <view class="p-item-label">开始时间：</view>
           <view class="p-item-text">{{year + '' + meetingDetail.beginDate}}</view>
         </view>
-        <view class="p-item g-border-670" >
+        <view class="p-item g-border-670">
           <view class="p-item-label">预估时长：</view>
           <view class="p-item-text">{{tools.toHourMinute(meetingDetail.duration)}}</view>
         </view>
-      
       </view>
     </view>
-    <view class="p-meeting-people p-meeting-detail box" >
+    <view class="p-meeting-people p-meeting-detail box">
       <button class="p-title p-title-btn">
         <text class="tit">参会成员</text>
         <button type="button" class="p-share-btn">
@@ -60,39 +59,23 @@
           邀请其他成员
         </button>
       </button>
-  
       <view class="p-item-box">
         <view class="p-item" wx:for="{{joinMeetingPeopleList}}" wx:key="index">
           <view class="p-item-text g-hidden-text g-border">
-          <image class="p-item-avatar" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
-            {{item.nickName}}
-            <text wx:if="{{item.isHost}}">(主持人)</text>
-
+            <image class="p-item-avatar" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+           
+              <text>{{item.nickName}}</text>
+              <text wx:if="{{item.isHost&&sourceType == 'records'}}">(主持人)</text>
+           
+            <input type="text" class="p-eidt-input" auto-focus="false" maxlength="20" value="{{item.nickName}}" bindblur="handleNickInput" bindinput="handleNickInputing" wx:if="{{isEditMode && item.isUpdate}}" />
+            <image src="/images/subscribe-meeting/btn-edit@2x.png" class="i-edit" bindtap="editNickName" data-nickname="{{item.nickName}}" data-id="{{item.confereeId}}" data-index="{{index}}" wx:if="{{item.isUpdate && sourceType != 'records'}}"></image>
           </view>
-           <image src="/images/subscribe-meeting/btn-edit@2x.png" class="i-edit" wx:if="{{item.isHost}}"></image>
-           <!-- <text class="i-nosel" wx:else></text> -->
-          <image src="/images/subscribe-meeting/icon-success@2x.png" class="i-edit" wx:else></image>
-          <!-- <view class="p-item-text g-hidden-text g-border">
-            <image class="i-mic" src="/images/index/ic-mic@2x.png" wx:if="{{item.isHost}}"></image>
-
-            <text class="p-join-meeting-name g-hidden-text"
-              wx:if="{{!isEditMode && item.isUpdate}}">{{item.nickName}}
-               
-              </text>
-            <input type="text" class="p-eidt-input" auto-focus="false" maxlength="20" value="{{item.nickName}}"
-              bindblur="handleNickInput" bindinput="handleNickInputing" wx:if="{{isEditMode && item.isUpdate}}" />
-
-            <text class="p-join-meeting-name g-hidden-text" wx:if="{{!item.isUpdate}}">{{item.nickName}}</text>
-
-            <image class="i-edit" src="/images/subscribe-meeting/btn-edit@2x.png" bindtap="editNickName"
-              data-nickname="{{item.nickName}}" data-id="{{item.confereeId}}" data-index="{{index}}"
-              wx:if="{{item.isUpdate && sourceType != 'records'}}"></image>
-          </view> -->
+          <!-- <text class="i-nosel" wx:else></text> -->
+          <!-- <image src="/images/subscribe-meeting/icon-success@2x.png" class="i-edit" wx:else></image> -->
         </view>
       </view>
     </view>
   </view>
-
   <!-- <view class="p-tab-controls">
     <view class="p-tab-box box1">
       取消会议
@@ -101,7 +84,17 @@
       加入会议
     </view>
   </view> -->
-
+  <view class="p-tab-controls" wx:if="{{sourceType != 'records'}}">
+    <view class="p-tab-box box1" bindtap="cancelMeeting">
+      {{meetingDetail.isHost ? '取消会议' :  '离开会议'}}
+    </view>
+    <view class="p-tab-box box2 {{meetingDetail.status == 3 ? 'p-tab-controls-item--disabled' : ''}} p-tab-controls-item--start}" bindtap="startMeeting" wx:if="{{meetingDetail.isHost}}">
+      开始会议
+    </view>
+    <view class="p-tab-box box2 {{meetingDetail.status != 1 ? 'p-tab-controls-item--disabled' : ''}} p-tab-controls-item--start " bindtap="startMeeting" wx:else>
+      加入会议
+    </view>
+  </view>
   <!-- <view class="p-tab-controls">
     <view class="p-tab-box box1">
       移出
@@ -110,24 +103,33 @@
       静音
     </view>
   </view> -->
-
-  <view class="p-tab-controls">
+  <!-- <view class="p-tab-controls">
     <view class="p-tab-box1" bindtap="endMeeting">
       结束会议
     </view>
-  </view>
-
+  </view> -->
   <!-- 取消会议弹框 -->
-  <!-- <modal show="{{isShowModal}}"
-    cancelText="{{meetingDetail.isHost ? '暂不取消' : (meetingDetail.status != 1 ? '暂不取消' : '暂不离开')}}"
-    confirmText="{{meetingDetail.isHost ? '确定取消' : (meetingDetail.status != 1 ? '确定取消' : '确定离开')}}"
-    bindcancel="bindCancel" bindconfirm='bindConfirm'>
+  <modal show="{{isShowModal}}" cancelText="{{meetingDetail.isHost ? '暂不取消' : '暂不离开'}}" confirmText="{{meetingDetail.isHost ? '确定取消' :  '确定离开'}}" bindcancel="bindCancel" bindconfirm='bindConfirm'>
     <view class='p-modal-content'>
-      <view class="p-modal-title">确定{{meetingDetail.isHost ? '取消' : (meetingDetail.status != 1 ? '取消' : '离开')}}会议吗？
+      <view class="p-modal-title">
+        确定{{meetingDetail.isHost ? '取消' :  '离开'}}会议吗？
       </view>
     </view>
+  </modal>
+  <!-- <modal
+  show="{{isShowModal}}"
+  cancelText="取消"
+  confirmText="确定"
+  bindcancel="bindCancel" bindconfirm='bindConfirm'
+  >
+  <view class='p-modal-content'>
+       
+      <view class="p-modal-title">提示</view>
+      <view class="p-modal-con">确定结束会议吗？
+  </view>
+      </view>
   </modal> -->
-  <modal
+  <!-- <modal
   show="{{isShowModal}}"
   cancelText="取消"
   confirmText="确定"
@@ -139,46 +141,24 @@
       <view class="p-modal-con">确定结束会议吗？
   </view>
       </view>
-  </modal>
-
-<modal
-  show="{{isShowModal}}"
-  cancelText="取消"
-  confirmText="确定"
-  bindcancel="bindCancel" bindconfirm='bindConfirm'
-  >
-  <view class='p-modal-content'>
-       
-      <view class="p-modal-title">提示</view>
-      <view class="p-modal-con">确定结束会议吗？
-  </view>
-      </view>
-  </modal>
- 
-<modal
-  show="{{isShowModal1}}"
-  confirmBtn="{{false}}"
-  cancelBtn="{{false}}"
-  >
-  <view class='p-modal-content'>
+  </modal> -->
+  <!-- <modal show="{{isShowModal1}}" confirmBtn="{{false}}" cancelBtn="{{false}}">
+    <view class='p-modal-content'>
       <view class="p-modal-title">会议已结束</view>
       <view class="p-modal-con">
         <view class="p-line">
-           <text class="p1">会议时间</text>
-           <text class="p2">09:00-09:45</text>
+          <text class="p1">会议时间</text>
+          <text class="p2">09:00-09:45</text>
         </view>
         <view class="p-line">
-           <text class="p1">历时</text>
-           <text class="p2">45’45’’</text>
+          <text class="p1">历时</text>
+          <text class="p2">45’45’’</text>
         </view>
         <view class="leaveMeeting" bindtap="handleLeavingMeeting">离开会议室</view>
-     </view>
       </view>
-  </modal>
-
-
-  <modal show="{{isShowModal3}}" cancelText="知道了" confirmText="联系客服" bindcancel="bindCancel3"
-    bindconfirm='bindConfirm3'>
+    </view>
+  </modal> -->
+  <modal show="{{isShowModal3}}" cancelText="知道了" confirmText="联系客服" bindcancel="bindCancel3" bindconfirm='bindConfirm3'>
     <view class='p-modal-content'>
       <view class="p-modal-title">试用结束，请联系客服购买使用</view>
     </view>
@@ -188,5 +168,4 @@
       <view class="p-modal-title">400-158-8816</view>
     </view>
   </modal>
-
 </view>

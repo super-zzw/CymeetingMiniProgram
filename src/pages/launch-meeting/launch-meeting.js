@@ -63,32 +63,32 @@ Page(Object.assign({}, MyTips, {
   async launchMeeting() {
     // eslint-disable-next-line sonarjs/no-redundant-boolean
     console.log(app.globalData.isFirstEntryMeetingPage)
-    if (app.globalData.isFirstEntryMeetingPage && (await utils.getAuthSetting('record') != true)) {
-    //   this.setData({toastContent:'您还未开启录音权限，请前往开启',
-    //   isShowModal3:true
+    // if (app.globalData.isFirstEntryMeetingPage && (await utils.getAuthSetting('record') != true)) {
+    // //   this.setData({toastContent:'您还未开启录音权限，请前往开启',
+    // //   isShowModal3:true
+    // // })
+    // // utils.showToast({ title: '您还未开启摄像头权限，请前往开启', icon: 'none', duration: 3000 });
+    // wx.authorize({
+    //   scope: 'scope.record',
+    //   success () {
+    //     // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+    //     // wx.startRecord()
+    //   }
     // })
-    // utils.showToast({ title: '您还未开启摄像头权限，请前往开启', icon: 'none', duration: 3000 });
-    wx.authorize({
-      scope: 'scope.record',
-      success () {
-        // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
-        // wx.startRecord()
-      }
-    })
-      // wx.openSetting({});
-      return;
-    }
+    //   // wx.openSetting({});
+    //   return;
+    // }
     // eslint-disable-next-line sonarjs/no-redundant-boolean
-    if (app.globalData.isFirstEntryMeetingPage && (await utils.getAuthSetting('camera') != true)) {
-      // utils.showToast({ title: '您还未开启摄像头权限，请前往开启', icon: 'none', duration: 3000 });
-      wx.authorize({
-        scope: 'scope.camera',
-        success () {
+    // if (app.globalData.isFirstEntryMeetingPage && (await utils.getAuthSetting('camera') != true)) {
+    //   // utils.showToast({ title: '您还未开启摄像头权限，请前往开启', icon: 'none', duration: 3000 });
+    //   wx.authorize({
+    //     scope: 'scope.camera',
+    //     success () {
           
-        }
-      })
-      return;
-    }
+    //     }
+    //   })
+    //   return;
+    // }
 
     const reg = /^\d{6}$/;
     if (this.data.psw && !reg.test(this.data.psw)) {

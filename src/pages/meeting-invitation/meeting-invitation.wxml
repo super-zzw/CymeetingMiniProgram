@@ -3,24 +3,23 @@
   <!-- <navbar title="保利威云会议" showIcon="{{false}}" hideIcon="{{true}}"></navbar> -->
   <view class="p-body">
     <view class="p-invite-name">{{inviteNickName}} 邀请你参加</view>
-    <!-- <view class="p-invite-theme g-hidden-text">{{meetingDetail.topic}}</view> -->
-    <view class="p-invite-theme g-hidden-text">职称考核评定会议</view>
+    <view class="p-invite-theme g-hidden-text">{{meetingDetail.topic}}</view>
+  
     <view class="p-invite-no" wx:if="{{meetingDetail.type == 2}}">
-      <text class="i-no" >NO.</text>
-      <!-- <text>{{tools.formatRoomNo(meetingDetail.roomNo)}}</text> -->
-      <text>999000</text>
+     <text class="p-no">NO.</text>
+     <text class="p-num">{{meetingDetail.roomNo}}</text>
     </view>
     <view class="p-box">
       <view class="p-box-item">
         <view class="p-label ">主持人</view>
-        <!-- <text>{{meetingDetail.nickName}}</text> -->
-        <text>红果果</text>
+        <text>{{meetingDetail.nickName}}</text>
+       
       </view>
       <view class="p-box-item">
         <view class="p-label}">
           开始时间</view>
-        <!-- <text>{{meetingDetail.beginDate}}</text> -->
-        <text>11:00 06/11</text>
+        <text>{{meetingDetail.beginDate}}</text>
+        <!-- <text>11:00 06/11</text> -->
       </view>
       <view class="p-box-item" wx:if="{{meetingDetail.type == 1}}">
         <view class="p-label ">预估时间</view>

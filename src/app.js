@@ -12,20 +12,20 @@ const utils = require('@common/utils/utils');
 App({
   async onShow() {
     this.getSystemInfo();
-  console.log('111')
-    if(utils.getStorage('sessionId')){
+  // console.log('111')
+  //   if(utils.getStorage('sessionId')){
 
-      let localSocket=this.globalData.wxScoket
+  //     let localSocket=this.globalData.wxScoket
      
-      if(!localSocket){
-        this.initSocket()
-      }
-      if (localSocket&&localSocket.readyState !== 0 && localSocket.readyState !== 1) {
-        console.log('开始尝试连接WebSocket！readyState=' + this.globalData.localSocket.readyState)
-        this.initSocket()
-      }
-      console.log('zzw',localSocket)
-    }
+  //     if(!localSocket){
+  //       this.initSocket()
+  //     }
+  //     if (localSocket&&localSocket.readyState !== 0 && localSocket.readyState !== 1) {
+  //       console.log('开始尝试连接WebSocket！readyState=' + this.globalData.localSocket.readyState)
+  //       this.initSocket()
+  //     }
+  //     console.log('zzw',localSocket)
+  //   }
   },
   onLaunch(){
     console.log(this)
@@ -56,7 +56,7 @@ App({
    
     
     
-    if(!this.globalData.wxScoket){
+    // if(!this.globalData.wxScoket){
       let socketToken = await getScoketToken();
       let _wsurl = `wss://meeting.gzcyou.com/socket/${socketToken}`;
       // let _wsurl = `wss://meeting.gzcyou.com/socket/${this.globalData.socketToken}`;
@@ -75,16 +75,22 @@ App({
       })
       this.globalData.wxScoket.onError((emsg) => {
         console.log("WebSocket连接出错：",emsg)
+        this.reconnect()
       })
       this.globalData.wxScoket.onClose((msg) => {
         console.log('WebSocket关闭连接连接:',msg)
+        this.reconnect()
       })
-    }
+    // }
 
     
 
   },
-  
+  reconnect(){
+      setTimeout(() => {
+        this.initSocket()
+      }, 1500);
+  },
   //发送wxscoket数据
   sendWxSocket(data,cb){
     if(this.globalData.wxScoket){

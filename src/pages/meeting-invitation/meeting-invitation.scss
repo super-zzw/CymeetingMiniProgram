@@ -42,22 +42,24 @@ font-size: 44rpx;
         justify-content: center;
       
         margin-top: 44rpx;
-        text {
-         
-          font-size: 56rpx;
+        .p-no{
+
+          font-size: 36rpx;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 500;
-          color: #181819;
-          line-height: 56rpx;
-                  }
-        .i-no {
+          color: #909399;
+          
+        }
+        .p-num {
          
-font-size: 36rpx;
+         
+font-size: 56rpx;
 font-family: PingFangSC-Medium, PingFang SC;
 font-weight: 500;
-color: #909399;
-line-height: 40rpx;
-        }
+color: #181819;
+line-height: 56rpx;
+                  }
+ 
 
       }
 

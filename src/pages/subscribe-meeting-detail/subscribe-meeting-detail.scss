@@ -42,7 +42,7 @@ page {
           height: 80rpx;
           display: flex;
           align-items: center;
-          justify-content: space-between;
+         
           font-size: $size32;
           box-sizing: border-box;
 
@@ -76,16 +76,16 @@ page {
             z-index: 666;
 
             &.p-item-room {
-              flex: 1;
+              // flex: 1;
               display: flex;
-              justify-content: space-around;
-              align-items: center;
+              // justify-content: space-around;
+              // align-items: center;
 
               .p-item-room-box {
-                flex: 1;
+               
                 display: flex;
                 align-items: center;
-
+                margin-right:6rpx ;
                 .i-no {
                   width: 52rpx;
                   height: 28rpx;
@@ -320,7 +320,10 @@ page {
 
 
       }
-
+    &.p-tab-controls-item--disabled{
+      
+background: #96CDFF;
+    }
     }
 
     .p-tab-box1 {

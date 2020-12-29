@@ -4,7 +4,7 @@ const Path = require('path');
 const gulpRename = require('gulp-rename');
 const gulpSass = require('gulp-sass');
 const gulpReplace = require('gulp-replace');
-const gulpESLint = require('gulp-eslint');
+// const gulpESLint = require('gulp-eslint');
 const gulpAlias = require('gulp-wechat-weapp-src-alisa');
 const imagemin = require('gulp-imagemin');
 const del = require('del');
@@ -52,9 +52,9 @@ gulp.task(tasks.buildJS, (cb) => {
   pump([
     gulp.src(paths.js),
     gulpAlias(aliasConfig),
-    gulpESLint(),
-    gulpESLint.format(),
-    gulpESLint.failAfterError(),
+    // gulpESLint(),
+    // gulpESLint.format(),
+    // gulpESLint.failAfterError(),
     gulp.dest('dist')
   ], cb);
 });

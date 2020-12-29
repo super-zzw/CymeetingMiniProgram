@@ -328,16 +328,14 @@ Page({
         this.getMySubscribe();
         this.getMeetingRecords();
         if (this.data.ongoingMeetingDetail.isHost) {
-          const chat = store.get('main.chat');
-          if (!chat) return;
-          const sendData = {
-            EVENT: 'endingForMeeting',
-            version: '1.0',
-            data: {},
-            tip: '会议发起者结束会议',
-            emitMode: 0
-          };
-          chat.sendSocketMessage(sendData, 'customMessage');
+         
+       
+          let data = JSON.stringify({
+            "event": "END_MEETING",
+            "meetingId": this.data.ongoingMeetingDetail.meetingId,
+            "timeStamp": new Date().getTime()
+          })
+          app.sendWxSocket(data)
         }
       } else {
         utils.showToast({ title: ret.message, icon: 'none'

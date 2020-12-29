@@ -3,11 +3,13 @@ import utils from '../../common/utils/utils';
 import { initChat } from '../../common/chat/initChat';
 const request = require('@common/request/request');
 const config = require('@common/config');
-
+let launched=false; 
+let socket=null
 export {
   getAppID,
   getMeetingDetail,
-  getScoketToken
+  getScoketToken,
+  createWebSocket
 };
 // 获取AppID和AppSecrect
 function getAppID() {
@@ -44,4 +46,33 @@ function getScoketToken(){
     if (res.code != config.successCode) return;
     return res.data;
   });
+}
+
+async function createWebSocket(){
+  if(!launched){
+    let socketToken = await getScoketToken();
+    let _wsurl = `wss://meeting.gzcyou.com/socket/${socketToken}`;
+    console.log("wxScoketUrl:",_wsurl)
+    socket = wx.connectSocket({
+      url: _wsurl,
+    })
+
+    socket.onMessage(data => {
+      //返回判断是否是本人
+      // console.log("收到ws数据:",data);
+    })
+
+    socket.onOpen(() => {
+      console.log('WebSocket已连接')
+    })
+    socket.onError((emsg) => {
+      console.log("WebSocket连接出错：",emsg)
+      this.reconnect()
+    })
+    socket.onClose((msg) => {
+      console.log('WebSocket关闭连接连接:',msg)
+      this.reconnect()
+    })
+  }
+  
 }

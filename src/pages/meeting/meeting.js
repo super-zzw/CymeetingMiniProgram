@@ -43,7 +43,7 @@ Page(Object.assign({}, MyTips, {
     changeViewModeStyle: '', // 白板切换按钮样式
     pageType: 'create', // 是否为会议发起者
     interval: null, // 主持人上报定时器
-
+    host:null, //是否是主持人
     // 会议室管理的变量
     isShowMeetingRoom: false, // 是否显示会议室管理的弹框页
     isHideIcon: true, // 是否隐藏头部的返回按钮
@@ -56,8 +56,11 @@ Page(Object.assign({}, MyTips, {
     leaveMeetingDetail: {}, // 离开房间后的会议统计信息
     isIphoneX: false, // 是否为iPhoneX机型
     isEditTheme: false, // 会议主题是否处于编辑状态
+    isEditName:false, //昵称是否处于编辑状态
     isLocked: false, // 是否锁定会议室
     index: '', // 当前编辑用户的索引
+    selectIndex:'', //当前选择的用户索引
+    selectInfo:'', //当前选择的用户信息
     isPageHide: false, // 当前页面是否被隐藏
     roomAddr: 'http://mt.polyv.net/login?m=', // 房间地址
     viewStatus:'agora',
@@ -126,6 +129,7 @@ Page(Object.assign({}, MyTips, {
 
   // 页面显示
   async onShow() {
+    console.log(app.globalData.wxScoket)
     const that = this;
     // 屏幕常亮
     utils.setKeepScreenOn();
@@ -174,7 +178,7 @@ Page(Object.assign({}, MyTips, {
             viewStatus:'agora'
                         })
             wx.setNavigationBarTitle({ title: "辰悠云会议"})
-            this.changeStatus();
+            this.changeStatus('agora');
         }
         if(data.event=='VIEW_NETLESS'){
             let _netLessRoomUuid = this.data.meetingDetail.netLessRoomUuid;
@@ -200,6 +204,36 @@ Page(Object.assign({}, MyTips, {
             isShowModal2: true
           });
         }
+        if(data.event=='SILENCE'){
+          // console.log(data)
+          if(data.ishost){
+
+            this.muteForMeeting(data.confereeId, true);
+          }else{
+            const _media = that.data.media;
+                    if (data.confereeId != that.data.uid) {
+                      for (let i = 0; i < _media.length; i++) {
+                        const item = _media[i];
+                        if (item.uid == data.confereeId) {
+                          _media[i].ismute = data.isMute;
+                          that.setData({ media: _media });
+                        }
+                      }
+                    }
+          }
+        }
+        if(data.event=='REMOVE_SILENCE'){
+          this.muteForMeeting(data.confereeId, false);
+        }
+        if(data.event=='KICK'){
+       
+          this.delForMeeting(data.confereeId);
+        }
+        if(data.event=='SET_NICK'||data.event=='PUBLIC_EVENT'){
+       
+                     this.getMeetingDetail()
+                    }
+        
       })
     }
     
@@ -392,21 +426,22 @@ Page(Object.assign({}, MyTips, {
   },
 
   // 主持人开关（用户）麦
-  muteForMeeting({ uid, isMute }) {
+  muteForMeeting( uid, isMute ) {
     const that = this;
-    const confereeId = store.get('main.confereeId');
-    const media = this.data.media || [];
-    if (confereeId && parseInt(confereeId) === parseInt(uid)) {
-      const _media = that.data.media;
+  
+    if (this.data.uid == uid) {
+     const joinMeetingPeopleList=that.data.joinMeetingPeopleList
+      // const _media = that.data.media;
       if (isMute) {
+        
         that.data.client.muteLocal('audio', () => {
+        
           utils.showToast({ title: '您已被主持人静麦', icon: 'none' });
-          _media.forEach((item, index) => {
+          joinMeetingPeopleList.forEach((item, index) => {
             if (item.uid == that.data.uid) {
-              _media[index].status = 1;
-              _media[index].ismute = true;
+              joinMeetingPeopleList[index].micMute = 1;
               that.setData({
-                media: _media
+                joinMeetingPeopleList: joinMeetingPeopleList
               });
             }
           });
@@ -424,12 +459,12 @@ Page(Object.assign({}, MyTips, {
       } else {
         that.data.client.unmuteLocal('audio', () => {
           utils.showToast({ title: '您已被主持人解除静麦', icon: 'none' });
-          _media.forEach((item, index) => {
+          joinMeetingPeopleList.forEach((item, index) => {
             if (item.uid == that.data.uid) {
-              _media[index].status = 0;
-              _media[index].ismute = false;
+              joinMeetingPeopleList[index].micMute = 1;
+    
               that.setData({
-                media: _media
+                joinMeetingPeopleList: joinMeetingPeopleList
               });
             }
           });
@@ -471,8 +506,8 @@ Page(Object.assign({}, MyTips, {
 
   // 主持人踢人
   delForMeeting(uid) {
-    const confereeId = store.get('main.confereeId');
-    if (confereeId && parseInt(confereeId) === parseInt(uid)) {
+    console.log(uid)
+    if (this.data.uid == uid) {
       utils.showToast({ title: '您被主持人移除出会议室', icon: 'none' });
       try {
         // 退出频道
@@ -679,7 +714,9 @@ Page(Object.assign({}, MyTips, {
       const uid = e.uid;
       console.log(utils.mklog(), `监听stream-added============用户 ${uid} 加入============`);
       // 订阅用户
+
       await that.subscribeUser(uid);
+      this.refreshDetail()
       // 上报用户状态
       that.updateUserState(uid, 1);
     });
@@ -910,31 +947,38 @@ Page(Object.assign({}, MyTips, {
     let hostUid = null;
 
     // console.log(utils.mklog(), onlineUsers, uid);
-    for (let i = 0; i < onlineUsers.length; i++) {
-      const item = onlineUsers[i];
-      if (item.isHost) {
-        hostUid = item.confereeId;
-      }
-    }
+    // for (let i = 0; i < onlineUsers.length; i++) {
+    //   const item = onlineUsers[i];
+    //   if (item.isHost) {
+    //     hostUid = item.confereeId;
+    //   }
+    // }
     // console.log(utils.mklog(), '======', uid, nowIsMute, 'hostUid=', hostUid);
 
-    if (!that.data.isCanChangeMic && hostUid != uid) {
-      utils.showToast({ title: '您已被主持人静音', icon: 'none' });
-      return;
-    }
+    // if (!that.data.isCanChangeMic && hostUid != uid) {
+    //   utils.showToast({ title: '您已被主持人静音', icon: 'none' });
+    //   return;
+    // }
 
-    // 发送socket
-    const chat = store.get('main.chat');
     const isMute = nowIsMute;
-    const sendData = {
-      EVENT: 'muteForMeeting1',
-      version: '1.0',
-      data: { uid, meetingId: this.data.meetingId, isMute },
-      tip: '会议发起者将指定参与者静音',
-      emitMode: 0
-    };
-    chat.sendSocketMessage(sendData, 'customMessage');
-
+    // 发送socket
+    // const sendData = {
+    //   EVENT: 'muteForMeeting1',
+    //   version: '1.0',
+    //   data: { uid, meetingId: this.data.meetingId, isMute },
+    //   tip: '会议发起者将指定参与者静音',
+    //   emitMode: 0
+    // };
+    // chat.sendSocketMessage(sendData, 'customMessage');
+    let data = JSON.stringify({
+      "event":'SILENCE' ,
+      "meetingId": this.data.meetingId,
+      "timeStamp": new Date().getTime(),
+      "confereeId":uid,
+      "isMute":isMute,
+      "ishost":0
+    })
+    app.sendWxSocket(data)
     if (!that.data.isCloseMic) {
       that.data.client.muteLocal('audio', () => {
         console.log(utils.mklog(), 'audio停止音频流成功');
@@ -1120,7 +1164,7 @@ Page(Object.assign({}, MyTips, {
           this.setData({
    webViewUrl:`${_baseUrl}?appIdentifier=${_appIdentifier}&roomToken=${_roomToken}&netLessRoomUuid=${_netLessRoomUuid}&sessionId=${utils.getStorage('sessionId')}&meetingId=${this.data.meetingId}&channelId=${channelId}`,
           })
-          this.changeStatus()
+          this.changeStatus('netless')
           setTimeout(() => {
             this.setData({
               viewStatus:'netless'
@@ -1146,8 +1190,8 @@ app.sendWxSocket(data, () => {
       }
   },
   // 修改会议状态
-  changeStatus(){
-    request.post('/api/meeting/meeting/viewstatus', { meetingId: this.data.meetingId, status: 'netless' });
+  changeStatus(status){
+    request.post('/api/meeting/meeting/viewstatus', { meetingId: this.data.meetingId, status });
   },
   // 会议详情
   async getMeetingDetail() {
@@ -1156,9 +1200,16 @@ app.sendWxSocket(data, () => {
       if (ret.code == config.successCode) {
         const _joinMeetingPeopleList = ret.data.conferees;
         for (let i = 0; i < _joinMeetingPeopleList.length; i++) {
-          _joinMeetingPeopleList[i]['isTouchMove'] = false;
+          _joinMeetingPeopleList[i]['isEditName'] = false;
+          if(_joinMeetingPeopleList[i].isHost==1){
+            let a=_joinMeetingPeopleList[0]
+            _joinMeetingPeopleList[0]=_joinMeetingPeopleList[i]
+            _joinMeetingPeopleList[i]=a
+          }
         }
+        
         this.setData({
+          host:ret.data.isHost,
           meetingDetail: ret.data,
           viewStatus:ret.data.viewStatus,
           joinMeetingPeopleList: _joinMeetingPeopleList
@@ -1176,10 +1227,22 @@ app.sendWxSocket(data, () => {
   // 编辑会议主题
   editTheme(e) {
     this.setData({
-      isEditTheme: !this.data.isEditTheme
+      isEditTheme: true
     });
   },
-
+  //编辑昵称
+  editName(e){
+    const { currentTarget: { dataset: {index } } } = e;
+    let list= this.data.joinMeetingPeopleList
+    list.forEach((item,i)=>{
+      if(i==index){
+        list[i].isEditName=true
+      }
+    })
+    this.setData({
+      joinMeetingPeopleList:list
+    })
+  },
   // 会议主题编辑中
   handleTopicInputing(e) {
     const { detail: { value } } = e;
@@ -1203,6 +1266,7 @@ app.sendWxSocket(data, () => {
     const ret = await request.post('/api/meeting/updateTopic', { meetingId: this.data.meetingId, topic: this.data.meetingDetail.topic });
     try {
       if (ret.code == config.successCode) {
+        this.refreshDetail()
         this.setData({
           'meetingDetail.topic': this.data.meetingDetail.topic
         });
@@ -1216,6 +1280,7 @@ app.sendWxSocket(data, () => {
 
   handleNickInputing(e) {
     const { detail: { value } } = e;
+   
     if (this.data.meetingDetail.isHost) {
       if (utils.getLen(value) > 20) {
         this.setData({
@@ -1275,6 +1340,16 @@ app.sendWxSocket(data, () => {
   // 编辑参与人员昵称
   async handleNickInput(e) {
     const { detail: { value } } = e;
+    const { currentTarget: { dataset: { index } } } = e;
+    let list= this.data.joinMeetingPeopleList
+    list.forEach((item,i)=>{
+      if(i==index){
+        list[i].isEditName=false
+      }
+    })
+    this.setData({
+      joinMeetingPeopleList:list
+    })
     if (utils.getLen(value) > 16) {
       this.setData({
         nickName: value.substring(0, 16)
@@ -1287,9 +1362,15 @@ app.sendWxSocket(data, () => {
     const ret = await request.post('/api/meeting/updateName', { confereeId: this.data.uid, nickName: this.data.nickName });
     try {
       if (ret.code == config.successCode) {
-        this.setData({
-          isEditMode: false
-        });
+        
+        let data = JSON.stringify({
+          "event":'SET_NICK' ,
+          "meetingId": this.data.meetingId,
+          "timeStamp": new Date().getTime(),
+          "confereeId":this.data.uid,
+          "nickName":this.data.nickName
+        })
+        app.sendWxSocket(data)
         this.getMeetingDetail();
       } else {
         utils.showToast({ title: ret.message, icon: 'none' });
@@ -1300,24 +1381,28 @@ app.sendWxSocket(data, () => {
   },
 
   // 主持人静言用户
-  async handleVoice(e) {
-    const { currentTarget: { dataset: { uid, ismute: nowIsMute, index } } } = e;
+  async handleVoice() {
    
-   
-    const isMute = !nowIsMute;
-    const ret = await request.post('/api/meeting/updateMicMute', { confereeId: uid, micMute: isMute ? 1 : 0 });
+   const {confereeId,micMute}=this.data.selectInfo
+   const isMute = !micMute;
+   let event
+    const ret = await request.post('/api/meeting/updateMicMute', { confereeId, micMute:  isMute? 1 : 0 });
     try {
       if (ret.code == config.successCode) {
-        // const sendData = {
-        //   EVENT: 'muteForMeeting',
-        //   version: '1.0',
-        //   data: { uid, meetingId: this.data.meetingId, isMute },
-        //   tip: '会议发起者将指定参与者静音',
-        //   emitMode: 0
-        // };
-        // chat.sendSocketMessage(sendData, 'customMessage');
+          event=isMute?"SILENCE":'REMOVE_SILENCE'
+        let data = JSON.stringify({
+          "event":event ,
+          "meetingId": this.data.meetingId,
+          "timeStamp": new Date().getTime(),
+          "confereeId":confereeId,
+          "ishost":1
+        })
+        app.sendWxSocket(data)
         // console.log('主持人发送静音socket，发送数据为=', sendData);
         this.getMeetingDetail();
+        this.setData({
+          selectIndex:''
+        })
       } else {
         utils.showToast({ title: ret.message, icon: 'none' });
       }
@@ -1329,22 +1414,21 @@ app.sendWxSocket(data, () => {
 
   // 移除会议室用户
   async handleDel(e) {
-    const { currentTarget: { dataset: { uid, index } } } = e;
-    const ret = await request.post('/api/meeting/removeUser', { meetingId: this.data.meetingId, confereeId: uid });
+    const {confereeId}=this.data.selectInfo
+    const ret = await request.post('/api/meeting/removeUser', { meetingId: this.data.meetingId, confereeId });
     try {
       if (ret.code == config.successCode) {
-        // 发送socket
-        const chat = store.get('main.chat');
-        if (!chat) return;
-        const sendData = {
-          EVENT: 'delForMeeting',
-          version: '1.0',
-          data: { uid, meetingId: this.data.meetingId },
-          tip: '会议发起者将指定参与者移除',
-          emitMode: 0
-        };
-        chat.sendSocketMessage(sendData, 'customMessage');
-        console.log('主持人发送移除socket，发送数据为=', sendData);
+      
+        let data = JSON.stringify({
+          "event":'KICK' ,
+          "meetingId": this.data.meetingId,
+          "timeStamp": new Date().getTime(),
+          "confereeId":confereeId
+        })
+        this.setData({
+          selectIndex:''
+        })
+        app.sendWxSocket(data)
         this.getMeetingDetail();
       } else {
         utils.showToast({ title: ret.message, icon: 'none' });
@@ -1370,55 +1454,26 @@ app.sendWxSocket(data, () => {
 
   // 结束会议确认回调
   async bindConfirm() {
+    console.log(this.data.isHost)
+    if(this.data.isHost==1){
+      let data = JSON.stringify({
+        "event": "END_MEETING",
+        "meetingId": this.data.meetingId,
+        "timeStamp": new Date().getTime()
+      })
+      app.sendWxSocket(data)
+      const ret = await request.post('/api/meeting/leaveMeeting', { meetingId: this.data.meetingId });
+          this.setData({
+            leaveMeetingDetail: ret.data,
+            isShowModal2: true
+          });
+    }else{
+     this.refreshDetail()
+     await request.post('/api/meeting/leaveMeeting', { meetingId: this.data.meetingId });
+      utils.reLaunch('/pages/index/index');
+    }
   
-    let data = JSON.stringify({
-      "event": "END_MEETING",
-      "meetingId": this.data.meetingId,
-      "timeStamp": new Date().getTime()
-    })
-    app.sendWxSocket(data)
-    // const ret = await request.post('/api/meeting/leaveMeeting', { meetingId: this.data.meetingId });
-    // this.updateMicStatus(this.data.uid, 0);
-    // this.updateCam(this.data.uid, 1);
-    // app.globalData.isChangedPage = false;
-    // this.data.client && this.data.client.destroy();
-    // this.data.client = null;
-    // console.log('结束会议确认回调==', app.globalData.isChangedPage);
-    // try {
-    //   if (ret.code == config.successCode) {
-    //     if (this.data.meetingDetail.isHost == 1) {
-    //       const chat = store.get('main.chat');
-    //       if (!chat) return;
-       
-    //       // 会议发起者结束会议socket
-    //       let data = JSON.stringify({
-
-    //         "event": "END_MEETING",
-    //         "meetingId": this.data.meetingId,
-          
-          
-    //         "timeStamp": new Date().getTime()
-    //       })
-    //       app.sendWxSocket(data)
-
-    //       this.setData({
-    //         leaveMeetingDetail: ret.data,
-    //         isShowModal: false,
-    //         isShowModal2: true
-    //       });
-    //     } else {
-    //       utils.reLaunch('/pages/index/index');
-    //     }
-    //   } else {
-    //     utils.showToast({ title: ret.message, icon: 'none' });
-    //   }
-    // } catch (error) {
-
-    // }
-
-    // 结束画板
-    // if (parseInt(this.data.meetingDetail.isHost) === 1) api.closeMeetingPPT(this.data.meetingDetail.roomNo);
-    // disconnectSocket();
+    
   },
   bindConfirm2() {
     this.setData({
@@ -1433,50 +1488,42 @@ app.sendWxSocket(data, () => {
       isHideIcon: true
     });
   },
-  touchstart(e) {
-    this.data.joinMeetingPeopleList.forEach((v, i) => {
-      if (v.isTouchMove) {
-        v.isTouchMove = false;
-      }
-    });
-    this.setData({
-      startX: e.changedTouches[0].clientX,
-      startY: e.changedTouches[0].clientY,
-      joinMeetingPeopleList: this.data.joinMeetingPeopleList
-    });
+  // 刷新会议详情
+  refreshDetail(){
+    let data = JSON.stringify({
+      "event": "PUBLIC_EVENT",
+      "meetingId": this.data.meetingId,
+      "timeStamp": new Date().getTime()
+    })
+    app.sendWxSocket(data)
   },
-  touchmove(e) {
-    const that = this,
-      index = e.currentTarget.dataset.index,
-      startX = that.data.startX,
-      startY = that.data.startY,
-      touchMoveX = e.changedTouches[0].clientX,
-      touchMoveY = e.changedTouches[0].clientY,
-      angle = that.angle({ X: startX, Y: startY }, { X: touchMoveX, Y: touchMoveY });
-    that.data.joinMeetingPeopleList.forEach((v, i) => {
-      v.isTouchMove = false;
-      if (Math.abs(angle) > 30) return;
-      if (i == index) {
-        if (touchMoveX > startX) {
-          v.isTouchMove = false;
-        } else {
-          v.isTouchMove = true;
-        }
-      }
-    });
-    that.setData({
-      joinMeetingPeopleList: that.data.joinMeetingPeopleList
-    });
-  },
+
   angle(start, end) {
     const _X = end.X - start.X,
       _Y = end.Y - start.Y;
     return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
   },
+  // 主持人选择用户
+  selectMember(e){
+    const { currentTarget: { dataset: {index,info } } } = e;
+    if(this.data.selectIndex==index){
+      this.setData({
+        selectIndex:'',
+        selectInfo:null
+      })
+    }else{
+      this.setData({
+        selectIndex:index,
+        selectInfo:info
+      })
+    }
+   
+  
+  },
   onShareAppMessage(e) {
     const { from } = e;
     const meetingId = this.data.meetingId;
-    const inviteNickName = utils.getStorage('userInfo').nickName;
+    const inviteNickName = this.data.nickName;
     const topic = this.data.meetingDetail.topic;
     const title = inviteNickName + '邀请您参与' + topic;
     const url = '/pages/meeting-invitation/meeting-invitation?meetingId=' + meetingId + '&inviteNickName=' + inviteNickName;

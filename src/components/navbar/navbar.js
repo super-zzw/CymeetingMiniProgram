@@ -18,7 +18,7 @@ Component({
   properties: {
     title: {
       type: String,
-      value: '保利威云会议'
+      value: '辰悠云会议'
     },
     hideIcon: {
       type: Boolean,

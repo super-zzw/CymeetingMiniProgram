@@ -67,7 +67,9 @@
         </view>
       </view>
       <view class="p-list">
-        <view class="p-list-item g-border-670" wx:for="{{mySubscribeList}}" wx:key="index" bindtap="skipPage">
+        <view class="p-list-item g-border-670" wx:for="{{mySubscribeList}}" wx:key="index" bindtap="skipPage"
+         data-type="subscribe" data-roomno="{{item.channelId}}" data-id="{{item.meetingId}}"
+          data-status="{{item.status}}" data-ishost="{{item.isHost}}" data-confereeid="{{item.confereeId}}">
          <view class="p-list-item-title">
              {{item.topic}}
           </view>
@@ -78,10 +80,12 @@
             {{item.date}}
             <view class="tip">4天后</view>
           </view> -->
-          <view class="p-list-item-time timeout">
+          <!-- <view class="p-list-item-time timeout">
             {{item.times+' '+item.beginDate}}
             <view class="tip">已超时</view>
-          </view>
+          </view> -->
+          <view
+              class="p-list-item-time {{item.timeStatus == null ? 'timeout' : 'notimeout'}}"> {{item.times+' '+item.beginDate}}<view class="tip">{{item.timeStatus == null ? '已超时' : item.timeStatus}} </view></view>
         </view>
         <view class="p-look-more" bindtap="lookeMoreSubscribeMeeting" wx:if="{{total1 > 5 && isCanRequest1}}">
           <text>查看更多</text>

@@ -26,9 +26,7 @@ Page({
     isShowModal1:false, //是否显示结束会议弹框
     isShowModal3: false, // 是否显示试用结束弹框
     isShowModal4: false, // 是否显示联系客服弹框
-    meetingDetail: {
-      topic:'职称考核评定会议'
-    }, // 会议详情
+    meetingDetail: {}, // 会议详情
     joinMeetingPeopleList: [{
       avatarUrl:'https://thirdwx.qlogo.cn/mmopen/vi_32/rOLs5CcKrLv5QTajbXOhhT3f2eAENHPF7kg3OZFUl99pzafFbN9HoIiaQCgoPceR7TknS4DwWR5UQAcRSMWFIpQ/132',
       nickName:'红果果',
@@ -101,10 +99,16 @@ Page({
     });
   },
   async bindConfirm() {
-    this.bindCancel();
-    this.setData({
-      isShowModal1:true
-    })
+    this.cancelMeeting();
+    if (this.data.meetingDetail.isHost) {
+      this.handleCancelMeeting();
+    } else {
+      if (this.data.meetingDetail.status != 1) {
+        this.handleCancelMeeting();
+      } else {
+        this.handleLeavingMeeting();
+      }
+    }
    
   },
   // 取消会议
@@ -135,9 +139,19 @@ Page({
   },
   // 离开会议
   async handleLeavingMeeting() {
-    this.setData({
-      isShowModal1:false
-    })
+    const ret = await request.post('/api/meeting/leaveMeeting', { meetingId: this.data.meetingId });
+    try {
+      if (ret.code == config.successCode) {
+        this.setData({
+          isShowModal: false
+        });
+        utils.reLaunch('/pages/index/index');
+      } else {
+        utils.showToast({ title: ret.message, icon: 'none' });
+      }
+    } catch (error) {
+      utils.showToast({ title: '离开失败', icon: 'none' });
+    }
   },
   // 开始、加入会议
   async startMeeting() {
@@ -284,19 +298,19 @@ Page({
   },
   onLoad(opt) {
    
-    // const { meetingId, roomno, sourceType } = opt;
-    // this.setData({
-    //   meetingId: meetingId,
-    //   roomno: roomno,
-    //   sourceType: sourceType
-    // });
-    // this.getMeetingDetail();
+    const { meetingId, roomno, sourceType } = opt;
+    this.setData({
+      meetingId: meetingId,
+      roomno: roomno,
+      sourceType: sourceType
+    });
+    this.getMeetingDetail();
   },
   onShow() {
-    // this.setData({
-    //   isIphoneX: app.globalData.isIphoneX,
-    //   year: new Date().getFullYear() + '年'
-    // });
+    this.setData({
+      isIphoneX: app.globalData.isIphoneX,
+      year: new Date().getFullYear() + '年'
+    });
   },
   onShareAppMessage(e) {
     const { from } = e;

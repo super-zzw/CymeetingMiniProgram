@@ -95,10 +95,12 @@ page {
       box-sizing: border-box;
       overflow-y: scroll;
       .p-meeting-detail {
-        padding: 0 40rpx;
+        margin: 32rpx 32rpx 40rpx;
         background-color: #fff;
         box-sizing: border-box;
-
+       padding: 20rpx 32rpx 20rpx 40rpx;
+box-shadow: 0px 2rpx 28rpx 0px rgba(0,0,0,0.06);
+border-radius: 20rpx;
         .p-title {
           font-size: $size30;
           font-family: SFProText-Medium;
@@ -139,7 +141,7 @@ page {
           .p-item {
             position: relative;
             z-index: 666;
-            height: 104rpx;
+            height: 80rpx;
             display: flex;
             align-items: center;
             font-size: $size34;
@@ -150,7 +152,7 @@ page {
               font-family: SFProText-Regular;
               font-weight: 400;
               color: $color8;
-              margin-right: 64rpx;
+              margin-right:50rpx;
             }
 
             .p-item-text {
@@ -222,22 +224,11 @@ page {
             }
           }
 
-          .p-item:after {
-            content: "";
-            width: 1340rpx;
-            height: 200%;
-            position: absolute;
-            top: 0;
-            z-index: 0;
-            border-bottom: 1px solid #f1f1f1;
-            transform: scale(0.5);
-            transform-origin: 0 0;
-            box-sizing: border-box;
-          }
+         
         }
 
         &.p-meeting-people {
-          padding: 0 0 96rpx 0;
+          padding: 44rpx 40rpx;
 
           .touch-item {
             display: flex;
@@ -293,106 +284,97 @@ page {
             position: relative;
             display: flex;
             align-items: center;
-            justify-content: space-around;
+            justify-content: space-between;
             box-sizing: border-box;
-            padding-left: 40rpx;
-            height: 104rpx;
-
-            text {
-              flex: 1;
+           padding: 0;
+           margin-bottom: 32rpx;
+           
+            .left{
+              
+font-size: 32rpx;
+font-family: PingFangSC-Medium, PingFang SC;
+font-weight: 500;
+color: #303133;
+line-height: 44rpx;
             }
-
-            .p-share-btn {
+            .right{
+              display: flex;
+              align-items: center;
               border: none;
-              margin-left: 0;
-              margin-right: 0;
-              padding-right: 40rpx;
-              padding-left: 200px;
-              box-sizing: border-box;
-              font-size: 18px;
-              text-align: center;
-              text-decoration: none;
-              border-radius: 0;
-              -webkit-tap-highlight-color: transparent;
-              overflow: hidden;
-              line-height: 1;
+              padding: 0;
               background-color: transparent;
+              margin: 0;
+             image{
+              width: 50rpx;
+              height: 50rpx;
+              margin-right: 8rpx;
+             }
+             text{
+               
+font-size: 32rpx;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+color: #1890FF;
+line-height: 40rpx;
+             }
             }
+            
+            button::after{
 
-            button::after {
               border: none;
+            
             }
-
-            .i-right {
-              width: 18rpx;
-              height: 28rpx;
-            }
+            
+           
           }
 
-          .p-title:after {
-            content: "";
-            width: 1340rpx;
-            height: 2px;
-            position: absolute;
-            bottom: 0;
-            left: 40rpx;
-            z-index: 0;
-            border-bottom: 1px solid #f1f1f1;
-            transform: scale(0.5);
-            transform-origin: 0 0;
-            box-sizing: border-box;
-          }
+        
 
-          .p-item-box {
-            padding: 0 40rpx;
-          }
-
-          .p-item-avatar {
-            width: 80rpx;
-            height: 80rpx;
-            margin-right: 24rpx;
-            border-radius: 100%;
-          }
-
-          .p-item-empty-avatar {
-            width: 80rpx;
-            height: 80rpx;
-            line-height: 80rpx;
-            margin-right: 24rpx;
-            border-radius: 100%;
-            background-color: #3183e9;
-            color: #fff;
-            font-size: 20rpx;
-            text-align: center;
-          }
-
-          .p-item-text {
-            position: relative;
-            z-index: 666;
-            height: 100%;
-            flex: 1;
-            display: flex;
-            align-items: center;
-
-            .i-edit {
-              width: 48rpx;
-              height: 48rpx;
+         .p-item.p-item1{
+           display: flex;
+           justify-content: space-between;
+           .p-left{
+             display: flex;
+             align-items: center;
+            .p-item-avatar {
+              width: 70rpx;
+              height: 70rpx;
+              margin-right: 24rpx;
+              border-radius: 100%;
+              margin-right: 14rpx;
+            } 
+            .p-item-name{
+  font-size: 32rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #181819;
+  line-height: 44rpx;
             }
+           }
+           .p-right{
+             .p-item-edit{
+              width: 45rpx;
+              height: 45rpx;
+             }
+             .noSel{
+              width: 40rpx;
+              height: 40rpx;
+              box-sizing: border-box;
+              display: block;
+              border: 2rpx solid #C0C4CC;
+              border-radius: 50%;
+             }
+             .p-item-select{
+              width: 40rpx;
+              height: 40rpx;
+             }
+           }
+        
+         }
+       
 
-            .i-mic {
-              width: 28rpx;
-              height: 36rpx;
-              margin-right: 12rpx;
-            }
+         
 
-            .p-join-meeting-name {
-              flex: 1;
-            }
-
-            .p-eidt-input {
-              flex: 1;
-            }
-          }
         }
       }
 
@@ -409,16 +391,26 @@ page {
       bottom: 0;
       z-index: 9999999999;
       width: 100%;
-
-      .p-tab-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
+      height: 128rpx;
+      background: #fff;
+      
+     .p-tabs{
+      margin: 0 32rpx;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+   display: flex;
+     }
         .p-tab-controls-item {
           flex: 1;
-          height: 96rpx;
-          line-height: 96rpx;
+          height: 88rpx;
+         
+
+
+border-radius: 44rpx;
+
+line-height: 88rpx;
+
           font-size: $size36;
           font-family: PingFangSC-Regular;
           font-weight: 400;
@@ -427,10 +419,11 @@ page {
           &.p-tab-controls-item--cancel {
             color: #000;
             background-color: #fff;
+            border: 2rpx solid #C0C4CC;
           }
 
           &.p-tab-controls-item--start {
-            background-color: #0066e6;
+            background-color:#1890FF;
             color: #fff;
 
             &.p-tab-controls-item--disabled {
@@ -445,8 +438,12 @@ page {
           &.p-tab-controls-item-iphonex {
             padding-bottom: 70rpx;
           }
+          &.p-tab-controls-item1{
+            margin-right: 30rpx;
+          }
         }
-      }
+        
+      
     }
 
     .p-modal-content {
